@@ -32,7 +32,7 @@ class TeamForm
                     ->relationship(
                         name: 'coach', 
                         titleAttribute: 'name',
-                        modifyQueryUsing: fn ($query) => $query->role('Coach')
+                        modifyQueryUsing: fn ($query) => $query->role(['Coach', 'Senior Coach'])
                     ),
                 Select::make('members')
                     ->multiple()

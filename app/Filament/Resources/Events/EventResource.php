@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Filament\Resources\Teams;
+namespace App\Filament\Resources\Events;
 
-use App\Filament\Resources\Teams\Pages\CreateTeam;
-use App\Filament\Resources\Teams\Pages\EditTeam;
-use App\Filament\Resources\Teams\Pages\ListTeams;
-use App\Filament\Resources\Teams\Schemas\TeamForm;
-use App\Filament\Resources\Teams\Tables\TeamsTable;
-use App\Models\Team;
+use App\Filament\Resources\Events\Pages\CreateEvent;
+use App\Filament\Resources\Events\Pages\EditEvent;
+use App\Filament\Resources\Events\Pages\ListEvents;
+use App\Filament\Resources\Events\Schemas\EventForm;
+use App\Filament\Resources\Events\Tables\EventsTable;
+use App\Models\Event;
 use BackedEnum;
 use UnitEnum;
 use Filament\Resources\Resource;
@@ -17,22 +17,22 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
-class TeamResource extends Resource
+class EventResource extends Resource
 {
-    protected static ?string $model = Team::class;
+    protected static ?string $model = Event::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::UserGroup;
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
 
     protected static string | UnitEnum | null $navigationGroup = 'CTF';
 
     public static function form(Schema $schema): Schema
     {
-        return TeamForm::configure($schema);
+        return EventForm::configure($schema);
     }
 
     public static function table(Table $table): Table
     {
-        return TeamsTable::configure($table);
+        return EventsTable::configure($table);
     }
 
     public static function getRelations(): array
@@ -45,9 +45,9 @@ class TeamResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ListTeams::route('/'),
-            'create' => CreateTeam::route('/create'),
-            'edit' => EditTeam::route('/{record}/edit'),
+            'index' => ListEvents::route('/'),
+            'create' => CreateEvent::route('/create'),
+            'edit' => EditEvent::route('/{record}/edit'),
         ];
     }
 
@@ -57,10 +57,5 @@ class TeamResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
-    }
-
-    public static function getNavigationBadge(): ?string
-    {
-        return static::getModel()::count();
     }
 }
