@@ -61,4 +61,9 @@ class PermissionsAndRolesSeeder extends Seeder
             }
         }
     }
+
+    public static function nonSuperAdminRoles(): array
+    {
+        return array_diff(self::$ROLES, ['Super Admin']);
+    }
 }

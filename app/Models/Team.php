@@ -3,46 +3,46 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Laravel\Jetstream\Events\TeamCreated;
-use Laravel\Jetstream\Events\TeamDeleted;
-use Laravel\Jetstream\Events\TeamUpdated;
-use Laravel\Jetstream\Team as JetstreamTeam;
+use Illuminate\Database\Eloquent\Model;
+use App\Models\User;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
-class Team extends JetstreamTeam
+class Team extends Model
 {
-    /** @use HasFactory<\Database\Factories\TeamFactory> */
+    use SoftDeletes;
     use HasFactory;
-
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
-        'personal_team',
+        'captain_id'
     ];
 
-    /**
-     * The event map for the model.
-     *
-     * @var array<string, class-string>
-     */
-    protected $dispatchesEvents = [
-        'created' => TeamCreated::class,
-        'updated' => TeamUpdated::class,
-        'deleted' => TeamDeleted::class,
-    ];
-
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    protected static function booted()
     {
-        return [
-            'personal_team' => 'boolean',
-        ];
+        static::saving(function ($team) {
+            // Ensure captain is a team member
+            if ($team->captain->team_id !== $team->id) {
+                throw new \Exception('Captain must be a team member');
+            }
+            
+            // Max 4 participants
+            if ($team->members()->count() > 4) {
+                throw new \Exception('Teams cannot have more than 4 members');
+            }
+        });
+    }
+
+    public function captain()
+    {
+        return $this->belongsTo(User::class, 'captain_id');
+    }
+
+    public function coach()
+    {
+        return $this->belongsTo(User::class, 'coach_id');
+    }
+
+    public function members()
+    {
+        return $this->hasMany(User::class);
     }
 }

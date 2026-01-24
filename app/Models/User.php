@@ -11,6 +11,7 @@ use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use App\Models\Team;
 
 
 class User extends Authenticatable
@@ -37,8 +38,7 @@ class User extends Authenticatable
         'password',
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
+    /*
      *
      * @var array<int, string>
      */
@@ -69,5 +69,20 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    public function team()
+    {
+        return $this->belongsTo(Team::class);
+    }
+
+    public function captainedTeam()
+    {
+        return $this->hasOne(Team::class, 'captain_id');
+    }
+
+    public function coachedTeams()
+    {
+        return $this->hasMany(Team::class, 'coach_id');
     }
 }

@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Filament\Resources\Users\Tables;
+namespace App\Filament\Resources\Teams\Tables;
 
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
-use Filament\Tables\Table;
+use Filament\Actions\ForceDeleteBulkAction;
+use Filament\Actions\RestoreBulkAction;
 use Filament\Tables\Filters\TrashedFilter;
-use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Table;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ForceDeleteAction;
-use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreAction;
-use Filament\Actions\RestoreBulkAction;
+use Filament\Support\Icons\Heroicon;
 
-class UsersTable
+class TeamsTable
 {
     public static function configure(Table $table): Table
     {
@@ -24,19 +24,16 @@ class UsersTable
                 TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
-                TextColumn::make('email')
-                    ->icon(Heroicon::Envelope)
-                    ->searchable()
-                    ->sortable(),
-                TextColumn::make('roles.name')
-                    ->label('Role'),
+                TextColumn::make('captain.name'),
+                TextColumn::make('coach.name'),
                 TextColumn::make('created_at')
                     ->since()
                     ->dateTimeTooltip()
                     ->sortable(),
             ])
             ->filters([
-                TrashedFilter::make()
+                TrashedFilter::make(),
+                // SelectFilter::make('roles'),
             ])
             ->recordActions([
                 EditAction::make(),
