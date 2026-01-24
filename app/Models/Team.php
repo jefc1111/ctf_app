@@ -13,7 +13,8 @@ class Team extends Model
     use HasFactory;
     protected $fillable = [
         'name',
-        'captain_id'
+        'captain_id',
+        'coach_id'
     ];
 
     protected static function booted()

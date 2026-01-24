@@ -47,7 +47,7 @@ class UsersAndTeamsSeeder extends Seeder
             abort(400, "No TEST_USER_PASSWORD set in .env");
         }
 
-        $qtyUsersPerRole = 10;
+        $qtyUsersPerRole = 20;
 
         $testUsersByRoleCode = [];
 
@@ -71,19 +71,24 @@ class UsersAndTeamsSeeder extends Seeder
 
     private function createTestTeams(array $testUsersByRoleCode): void
     {
-        if (! array_key_exists('p', $testUsersByRoleCode)) {
+        if (! array_key_exists('p', $testUsersByRoleCode) || empty($testUsersByRoleCode['p'])) {
             \Log::warning("Unable to create test teams because no participant users are available");
         }
         
-        $qtyTestTeams = 3;
-
-        foreach ($testUsersByRoleCode['p'] as $participantUser) {
+        // For each set of 4 participants we'll create a team (the last team may have < 4 members)
+        foreach (collect($testUsersByRoleCode['p'])->chunk(4) as $k => $participantUserSet) {
+            // The first participant in the set gets to be captain                
             $team = Team::factory()->create([
                 'name' => fake()->word(),
-                'captain_id' => $participantUser->id,
+                'captain_id' => $participantUserSet->first(),
+                // Let's assign a coach to every other team, and we'll re-use coaches
+                'coach_id' => $k % 2 === 0 ? $testUsersByRoleCode['c'][$k % 3] : null
             ]);
-
-            $participantUser->team()->associate($team);
+            
+            // All users in the set (including captain) are team members
+            foreach ($participantUserSet as $participantUser) {
+                $participantUser->team()->associate($team);
+            }
         }
     }
 }
