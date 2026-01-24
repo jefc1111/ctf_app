@@ -88,6 +88,8 @@ class UsersAndTeamsSeeder extends Seeder
             // All users in the set (including captain) are team members
             foreach ($participantUserSet as $participantUser) {
                 $participantUser->team()->associate($team);
+
+                $participantUser->save();
             }
         }
     }
