@@ -25,6 +25,8 @@ class TeamResource extends Resource
 
     protected static string | UnitEnum | null $navigationGroup = 'CTF';
 
+    protected static ?string $recordTitleAttribute = 'name';
+
     public static function form(Schema $schema): Schema
     {
         return TeamForm::configure($schema);
