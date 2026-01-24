@@ -8,6 +8,8 @@ use Filament\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use Filament\Support\Icons\Heroicon;
+use Filament\Tables\Columns\SelectColumn;
+use Database\Seeders\PermissionsAndRolesSeeder;
 
 class UsersTable
 {
@@ -17,7 +19,11 @@ class UsersTable
             ->columns([
                 TextColumn::make('name'),
                 TextColumn::make('email')
-                    ->icon(Heroicon::Envelope)
+                    ->icon(Heroicon::Envelope),
+                TextColumn::make('roles.name'),
+                TextColumn::make('created_at')
+                    ->since()
+                    ->dateTimeTooltip() // Accepts a custom PHP date formatting string
             ])
             ->filters([
                 //

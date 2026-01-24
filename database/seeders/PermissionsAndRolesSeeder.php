@@ -11,7 +11,7 @@ use Illuminate\Support\Str;
 
 class PermissionsAndRolesSeeder extends Seeder
 {
-    private static array $ROLES = [
+    public static array $ROLES = [
         'sa' => 'Super Admin', // Is progrmatically granted all permissions
         'a' => 'Admin',
         'es' => 'Event Staff',
