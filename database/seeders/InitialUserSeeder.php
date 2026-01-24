@@ -20,7 +20,7 @@ class InitialUserSeeder extends Seeder
         }
 
         $user = User::factory()->withPersonalTeam()->create([
-            'name'     => 'Admin',
+            'name'     => 'Geoff',
             'email'    => 'geoff.c+admin@tracelabs.org',
             'password' => bcrypt($password),
         ]);

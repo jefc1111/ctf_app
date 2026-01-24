@@ -14,6 +14,7 @@ use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreAction;
 use Filament\Actions\RestoreBulkAction;
+use Filament\Tables\Filters\SelectFilter;
 
 class UsersTable
 {
@@ -21,16 +22,23 @@ class UsersTable
     {
         return $table
             ->columns([
-                TextColumn::make('name'),
+                TextColumn::make('name')
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('email')
-                    ->icon(Heroicon::Envelope),
-                TextColumn::make('roles.name'),
+                    ->icon(Heroicon::Envelope)
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('roles.name')
+                    ->label('Role'),
                 TextColumn::make('created_at')
                     ->since()
-                    ->dateTimeTooltip() // Accepts a custom PHP date formatting string
+                    ->dateTimeTooltip()
+                    ->sortable(),
             ])
             ->filters([
                 TrashedFilter::make(),
+                // SelectFilter::make('roles'),
             ])
             ->recordActions([
                 EditAction::make(),
