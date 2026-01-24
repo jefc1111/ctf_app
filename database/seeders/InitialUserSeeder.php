@@ -19,7 +19,7 @@ class InitialUserSeeder extends Seeder
             abort(400, "No INITIAL_ADMIN_PASSWORD set in .env");
         }
 
-        $user = User::factory()->withPersonalTeam()->create([
+        $user = User::factory()->create([
             'name'     => 'Geoff',
             'email'    => 'geoff.c+admin@tracelabs.org',
             'password' => bcrypt($password),
