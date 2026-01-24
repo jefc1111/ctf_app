@@ -25,6 +25,6 @@ class InitialUserSeeder extends Seeder
             'password' => bcrypt($password),
         ]);
  
-        //$user->roles()->attach(1);
+        $user->assignRole('Super Admin');
     }
 }
