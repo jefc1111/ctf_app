@@ -17,6 +17,14 @@ class UserForm
                 TextInput::make('email')
                     ->email()
                     ->required(),
+                Select::make('mentor_id')
+                    ->label('Mentor')
+                    ->searchable()
+                    ->relationship(
+                        name: 'mentor', 
+                        titleAttribute: 'name',
+                        modifyQueryUsing: fn ($query) => $query->role(['Coach', 'Senior Coach'])
+                    ),
                 TextInput::make('password')
                     ->required()
                     ->hiddenOn(Operation::Edit),

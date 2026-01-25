@@ -25,6 +25,7 @@ class TeamsTable
                     ->label('Team Name')
                     ->searchable()
                     ->sortable(),
+                TextColumn::make('event.name'),
                 TextColumn::make('captain.name'),
                 TextColumn::make('coach.name'),
                 TextColumn::make('created_at')

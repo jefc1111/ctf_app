@@ -85,4 +85,14 @@ class User extends Authenticatable
     {
         return $this->hasMany(Team::class, 'coach_id');
     }
+
+    public function mentor()
+    {
+        return $this->belongsTo(User::class);
+    }
+
+    public function mentees()
+    {
+        return $this->hasMany(User::class);
+    }
 }

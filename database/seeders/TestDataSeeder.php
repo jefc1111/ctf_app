@@ -85,7 +85,7 @@ class TestDataSeeder extends Seeder
             $team = Team::factory()->create([
                 'name' => fake()->word(),
                 'captain_id' => $participantUserSet->first(),
-                // Let's assign a coach to every other team, and we'll re-use coaches
+                // Let's assign a coach to every other team (we'll re-use coaches)
                 'coach_id' => $k % 2 === 0 ? $testUsersByRoleCode['c'][$k % 3] : null,
                 'event_id' => ! empty($events) ? $events[0]->id : null
             ]);

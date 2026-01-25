@@ -42,6 +42,11 @@ class Team extends Model
         return $this->belongsTo(User::class, 'coach_id');
     }
 
+    public function event()
+    {
+        return $this->belongsTo(Event::class);
+    }
+
     public function members()
     {
         return $this->hasMany(User::class);

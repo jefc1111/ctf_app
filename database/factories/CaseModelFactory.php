@@ -24,7 +24,7 @@ class CaseModelFactory extends Factory
         return [
             'name' => fake()->name(),
             'age' => $age,
-            'characteristics' => fake()->paragraph(),
+            'characteristics' => fake()->sentence(),
             'disappearance_details' => fake()->sentence(),
             'date_of_birth' => $now->copy()->subYears($age),
             'height' => fake()->numberBetween(4, 6),
