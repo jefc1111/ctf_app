@@ -13,6 +13,7 @@ use Filament\Tables\Table;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreAction;
+use Filament\Tables\Columns\Summarizers\Count;
 
 class EventsTable
 {
@@ -27,6 +28,25 @@ class EventsTable
                     ->sortable(),
                 TextColumn::make('end_time')
                     ->sortable(),
+                TextColumn::make('cases_count')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        '4' => 'success',
+                        '0' => 'danger',
+                        default => 'warning',
+                    })
+                    ->label('Qty Cases')
+                    ->sortable()
+                    ->counts('cases'),
+                TextColumn::make('teams_count')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        '0' => 'gray',
+                        default => 'warning',
+                    })
+                    ->label('Qty Teams')
+                    ->sortable()
+                    ->counts('teams'),
             ])
             ->filters([
                 TrashedFilter::make(),

@@ -21,4 +21,9 @@ class Event extends Model
     {
         return $this->hasMany(CaseModel::class);
     }
+
+    public function teams()
+    {
+        return $this->hasMany(Team::class);
+    }
 }
