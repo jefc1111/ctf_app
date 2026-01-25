@@ -22,6 +22,8 @@ class CaseResource extends Resource
 {
     protected static ?string $model = CaseModel::class;
 
+    protected static ?string $modelLabel = 'Case';
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::DocumentDuplicate;
 
     protected static ?string $parentResource = EventResource::class;
