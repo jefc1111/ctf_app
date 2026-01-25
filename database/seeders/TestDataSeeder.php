@@ -19,9 +19,11 @@ class TestDataSeeder extends Seeder
     {
         $this->createSuperUser();
 
+        $events = $this->createTestEventsAndCases();
+
         $testUsersByRoleCode = $this->createTestUsers();
 
-        $this->createTestTeams($testUsersByRoleCode);
+        $this->createTestTeams($testUsersByRoleCode, $events);
     }
 
     private function createSuperUser(): void
@@ -71,7 +73,7 @@ class TestDataSeeder extends Seeder
         return $testUsersByRoleCode;
     }
 
-    private function createTestTeams(array $testUsersByRoleCode): void
+    private function createTestTeams(array $testUsersByRoleCode, array $events): void
     {
         if (! array_key_exists('p', $testUsersByRoleCode) || empty($testUsersByRoleCode['p'])) {
             \Log::warning("Unable to create test teams because no participant users are available");
@@ -79,12 +81,13 @@ class TestDataSeeder extends Seeder
         
         // For each set of 4 participants we'll create a team (the last team may have < 4 members)
         foreach (collect($testUsersByRoleCode['p'])->chunk(4) as $k => $participantUserSet) {
-            // The first participant in the set gets to be captain                
+            // The first participant in the set gets to be captain
             $team = Team::factory()->create([
                 'name' => fake()->word(),
                 'captain_id' => $participantUserSet->first(),
                 // Let's assign a coach to every other team, and we'll re-use coaches
-                'coach_id' => $k % 2 === 0 ? $testUsersByRoleCode['c'][$k % 3] : null
+                'coach_id' => $k % 2 === 0 ? $testUsersByRoleCode['c'][$k % 3] : null,
+                'event_id' => ! empty($events) ? $events[0]->id : null
             ]);
             
             // All users in the set (including captain) are team members
@@ -94,5 +97,31 @@ class TestDataSeeder extends Seeder
                 $participantUser->save();
             }
         }
+    }
+
+    private function createTestEventsAndCases(): array
+    {
+        $events = [];
+
+        $qtyTestEvents = 5;
+
+        $maxQtyCasesPerEvent = 4;
+
+        foreach (range(1, $qtyTestEvents) as $i) {
+            $event = Event::factory()->create();
+
+            // Make sure the first event created gets a full set of cases, the others get randomised amounts of cases
+            $qtyCasesForThisEvent = $i === 0 ? $maxQtyCasesPerEvent : rand(0, $maxQtyCasesPerEvent);
+            
+            foreach (range(1, $qtyCasesForThisEvent) as $_i) {
+                CaseModel::factory()->create([
+                    'event_id' => $event->id
+                ]);
+            }
+
+            $events[] = $event;
+        }
+
+        return $events;
     }
 }

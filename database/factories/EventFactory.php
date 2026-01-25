@@ -21,7 +21,7 @@ class EventFactory extends Factory
         
         $start = $now->minute < 30 
             ? $now->copy()->hour(11)->minute(0)->second(0)
-            : $now->copy()->hour(12)->minute(0)->second(0);;
+            : $now->copy()->hour(12)->minute(0)->second(0);
 
         return [
             'name' => 'TL CTF '.fake()->words(2, true),

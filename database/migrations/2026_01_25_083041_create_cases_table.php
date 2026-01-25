@@ -22,7 +22,7 @@ return new class extends Migration
             $table->string('height')->nullable();
             $table->string('weight')->nullable();
             $table->string('missing_from')->nullable();
-            $table->timestamp('missing_since')->nullable();
+            $table->datetime('missing_since')->nullable();
             $table->string('missing_since_note')->nullable();
             $table->string('notes')->nullable();
             $table->string('source_url')->nullable();

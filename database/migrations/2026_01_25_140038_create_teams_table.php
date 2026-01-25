@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->foreignId('captain_id')->unique()->constrained('users');
             $table->foreignId('coach_id')->nullable()->constrained('users');
+            $table->foreignId('event_id')->nullable()->constrained('events');
             $table->timestamps();
             $table->softDeletes();
         });
