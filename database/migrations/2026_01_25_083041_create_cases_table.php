@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('age')->nullable();
             $table->string('characteristics')->nullable();
-            $table->string('disapeearance_details')->nullable();
+            $table->string('disappearance_details')->nullable();
             $table->string('date_of_birth')->nullable();
             $table->string('height')->nullable();
             $table->string('weight')->nullable();

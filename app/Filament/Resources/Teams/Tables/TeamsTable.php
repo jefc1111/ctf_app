@@ -22,6 +22,7 @@ class TeamsTable
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->label('Team Name')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('captain.name'),
