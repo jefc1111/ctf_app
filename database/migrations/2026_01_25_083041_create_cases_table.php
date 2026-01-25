@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('cases', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('event_id');
             $table->string('name');
             $table->string('age')->nullable();
             $table->string('characteristics')->nullable();
@@ -21,7 +22,8 @@ return new class extends Migration
             $table->string('height')->nullable();
             $table->string('weight')->nullable();
             $table->string('missing_from')->nullable();
-            $table->string('missing_since')->nullable();
+            $table->timestamp('missing_since')->nullable();
+            $table->string('missing_since_note')->nullable();
             $table->string('notes')->nullable();
             $table->string('source_url')->nullable();
             $table->timestamps();

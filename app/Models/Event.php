@@ -16,4 +16,9 @@ class Event extends Model
         'start_time',
         'end_time'
     ];
+
+    public function cases()
+    {
+        return $this->hasMany(CaseModel::class);
+    }
 }

@@ -16,6 +16,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use App\Filament\Resources\Events\RelationManagers\CasesRelationManager;
 
 class EventResource extends Resource
 {
@@ -40,7 +41,7 @@ class EventResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            CasesRelationManager::class
         ];
     }
 

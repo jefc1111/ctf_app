@@ -5,8 +5,6 @@ namespace App\Filament\Resources\Teams\Schemas;
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
-use App\Filament\Resources\Users\Tables\UsersTable;
-use Filament\Forms\Components\ModalTableSelect;
 use Illuminate\Database\Eloquent\Model;
 
 class TeamForm
@@ -45,7 +43,6 @@ class TeamForm
                     ->searchPrompt('Search participants by their name or email address')
                     ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->name} (email: {$record->email})")
                     ->maxItems(4)
-                    // ->tableConfiguration(UsersTable::class)
             ]);
     }
 }

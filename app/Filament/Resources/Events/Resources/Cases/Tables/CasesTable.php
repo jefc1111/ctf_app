@@ -10,6 +10,7 @@ use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
+use Filament\Tables\Columns\TextColumn;
 
 class CasesTable
 {
@@ -17,7 +18,16 @@ class CasesTable
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('name')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('age')
+                    ->searchable()
+                    ->sortable(),
+                TextColumn::make('missing_since')
+                    ->since()
+                    ->dateTimeTooltip()
+                    ->sortable(),
             ])
             ->filters([
                 TrashedFilter::make(),
