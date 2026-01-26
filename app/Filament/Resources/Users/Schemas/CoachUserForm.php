@@ -27,7 +27,9 @@ class CoachUserForm
                     ),
                 TextInput::make('password')
                     ->required()
-                    ->hiddenOn(Operation::Edit),
+                    ->hiddenOn(Operation::Edit)
+                    ->password()
+                    ->revealable(),
                 Select::make('roles')
                     ->multiple(false)
                     ->relationship(titleAttribute: 'name')
