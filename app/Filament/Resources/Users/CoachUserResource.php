@@ -3,10 +3,10 @@
 namespace App\Filament\Resources\Users;
 
 use App\Filament\Resources\Users\Pages\CreateUser;
-use App\Filament\Resources\Users\Pages\EditUser;
+use App\Filament\Resources\Users\Pages\EditCoachUser;
 use App\Filament\Resources\Users\Pages\ListCoachUsers;
-use App\Filament\Resources\Users\Schemas\UserForm;
-use App\Filament\Resources\Users\Tables\UsersTable;
+use App\Filament\Resources\Users\Schemas\CoachUserForm;
+use App\Filament\Resources\Users\Tables\CoachUsersTable;
 use App\Models\User;
 use BackedEnum;
 use UnitEnum;
@@ -33,12 +33,12 @@ class CoachUserResource extends Resource
 
     public static function form(Schema $schema): Schema
     {
-        return UserForm::configure($schema);
+        return CoachUserForm::configure($schema);
     }
 
     public static function table(Table $table): Table
     {        
-        return UsersTable::configure($table);
+        return CoachUsersTable::configure($table);
     }
 
     public static function getRelations(): array
@@ -53,7 +53,7 @@ class CoachUserResource extends Resource
         return [
             'index' => ListCoachUsers::route('/'),
             'create' => CreateUser::route('/create'),
-            'edit' => EditUser::route('/{record}/edit'),
+            'edit' => EditCoachUser::route('/{record}/edit'),
         ];
     }
 
