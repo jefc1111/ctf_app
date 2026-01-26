@@ -11,6 +11,8 @@ use Filament\Actions\ViewAction;
 use Filament\Tables\Filters\TrashedFilter;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
+use Illuminate\Support\HtmlString;
+use Illuminate\Support\Str;
 
 class CasesTable
 {
@@ -28,6 +30,8 @@ class CasesTable
                     ->since()
                     ->dateTimeTooltip()
                     ->sortable(),
+                TextColumn::make('source_url')
+                    ->formatStateUsing(fn (string $state): HtmlString => new HtmlString(self::sourceUrlFormatter($state)))
             ])
             ->filters([
                 TrashedFilter::make(),
@@ -43,5 +47,12 @@ class CasesTable
                     RestoreBulkAction::make(),
                 ]),
             ]);
+    }
+
+    private static function sourceUrlFormatter(string $url): string 
+    {
+        $linkText = Str::limit($url, 50, ' (...)');
+         
+        return "<a href='$url' target='_blank'>$linkText</a>";
     }
 }
