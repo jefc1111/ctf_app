@@ -28,6 +28,8 @@ class TestDataSeeder extends Seeder
 
     private function createSuperUser(): void
     {
+        $this->command->info("Creating Super Admins");
+
         $password = env('INITIAL_ADMIN_PASSWORD');
 
         if (! $password) {
@@ -51,10 +53,16 @@ class TestDataSeeder extends Seeder
             abort(400, "No TEST_USER_PASSWORD set in .env");
         }
 
-        $qtyUsersPerRole = 20;
+        $qtyUsersPerRole = 50;
 
         $testUsersByRoleCode = [];
 
+        $this->command->info("Creating $qtyUsersPerRole Users per Role");
+
+        $total = $qtyUsersPerRole * count(PermissionsAndRolesSeeder::nonSuperAdminRoles());
+        $bar = $this->command->getOutput()->createProgressBar($total);
+        $bar->start();
+        
         foreach (PermissionsAndRolesSeeder::nonSuperAdminRoles() as $roleCode => $roleName) {
             $testUsersByRoleCode[$roleCode] = [];
 
@@ -67,14 +75,20 @@ class TestDataSeeder extends Seeder
                 $user->assignRole($roleName);
 
                 $testUsersByRoleCode[$roleCode][] = $user;
+
+                $bar->advance();
             }
         }
 
+        $bar->finish();
+        
         return $testUsersByRoleCode;
     }
 
     private function createTestTeams(array $testUsersByRoleCode, array $events): void
     {
+        $this->command->info("Creating some test Teams");
+
         if (! array_key_exists('p', $testUsersByRoleCode) || empty($testUsersByRoleCode['p'])) {
             \Log::warning("Unable to create test teams because no participant users are available");
         }
@@ -106,6 +120,8 @@ class TestDataSeeder extends Seeder
         $qtyTestEvents = 5;
 
         $maxQtyCasesPerEvent = 4;
+
+        $this->command->info("Creating $qtyTestEvents test Events and up to $maxQtyCasesPerEvent Cases per Event");
 
         foreach (range(1, $qtyTestEvents) as $i) {
             $event = Event::factory()->create();

@@ -11,6 +11,7 @@ use App\Filament\Resources\Submissions\Schemas\SubmissionInfolist;
 use App\Filament\Resources\Submissions\Tables\SubmissionsTable;
 use App\Models\Submission;
 use BackedEnum;
+use UnitEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -23,6 +24,12 @@ class SubmissionResource extends Resource
     protected static ?string $model = Submission::class;
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedRectangleStack;
+
+    protected static string|UnitEnum|null $navigationGroup = 'CTF';
+
+    protected static ?string $navigationLabel = 'All Submissions';
+
+    protected static ?int $navigationSort = 100;
 
     public static function form(Schema $schema): Schema
     {

@@ -16,15 +16,15 @@ return new class extends Migration
             $table->foreignId('event_id');
             $table->string('name');
             $table->string('age')->nullable();
-            $table->string('characteristics')->nullable();
-            $table->string('disappearance_details')->nullable();
+            $table->text('characteristics')->nullable();
+            $table->text('disappearance_details')->nullable();
             $table->string('date_of_birth')->nullable();
             $table->string('height')->nullable();
             $table->string('weight')->nullable();
             $table->string('missing_from')->nullable();
             $table->datetime('missing_since')->nullable();
             $table->string('missing_since_note')->nullable();
-            $table->string('notes')->nullable();
+            $table->text('notes')->nullable();
             $table->string('source_url')->nullable();
             $table->timestamps();
             $table->softDeletes();
