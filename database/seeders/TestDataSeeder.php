@@ -85,7 +85,7 @@ class TestDataSeeder extends Seeder
         return $testUsersByRoleCode;
     }
 
-    private function createTestTeams(array $testUsersByRoleCode, array $events): void
+    private function createTestTeams(array $testUsersByRoleCode, array $events): array
     {
         $this->command->info("Creating some test Teams");
 
@@ -93,6 +93,8 @@ class TestDataSeeder extends Seeder
             \Log::warning("Unable to create test teams because no participant users are available");
         }
         
+        $teams = [];
+
         // For each set of 4 participants we'll create a team (the last team may have < 4 members)
         foreach (collect($testUsersByRoleCode['p'])->chunk(4) as $k => $participantUserSet) {
             // The first participant in the set gets to be captain
@@ -111,6 +113,8 @@ class TestDataSeeder extends Seeder
                 $participantUser->save();
             }
         }
+
+        return $teams;
     }
 
     private function createTestEventsAndCases(): array
