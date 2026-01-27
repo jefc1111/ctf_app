@@ -6,6 +6,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Database\Seeders\TestDataSeeder;
 use Database\Seeders\PermissionsAndRolesSeeder;
+use Database\Seeders\SubmissionCategorySeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -19,19 +20,11 @@ class DatabaseSeeder extends Seeder
         ]);
 
         $this->call([
-            TestDataSeeder::class,
+            SubmissionCategorySeeder::class,
         ]);
 
-
-
-
-
-
-        // User::factory(10)->withPersonalTeam()->create();
-
-        // User::factory()->withPersonalTeam()->create([
-        //     'name' => 'Test User',
-        //     'email' => 'test@example.com',
-        // ]);
+        $this->call([
+            TestDataSeeder::class,
+        ]);
     }
 }

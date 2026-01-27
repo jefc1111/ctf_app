@@ -8,6 +8,9 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class SubmissionCategory extends Model
 {
     use SoftDeletes;
-    
-    //
+
+    protected $fillable = [
+        'name',
+        'points'
+    ];
 }
