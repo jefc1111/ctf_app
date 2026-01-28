@@ -19,7 +19,7 @@ class SubmissionForm
             ->components([
                 TextInput::make('name')
                     ->required(),
-                Select::make('category_id')
+                Select::make('submission_category_id')
                     ->required()
                     ->label('Submission category')
                     ->relationship(

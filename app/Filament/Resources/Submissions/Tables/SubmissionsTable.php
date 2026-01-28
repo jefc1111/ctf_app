@@ -22,7 +22,7 @@ class SubmissionsTable
             ->columns([
                 TextColumn::make('content')
                     ->searchable()
-                    ->limit(32),
+                    ->limit(16),
                 TextColumn::make('category.name')
                     ->searchable()
                     ->sortable(),
@@ -43,15 +43,15 @@ class SubmissionsTable
                         'DECLINED' => 'danger',
                         default => 'gray'
                     }),
-                TextColumn::make('created_at')
-                    ->since()
-                    ->dateTimeTooltip()
-                    ->sortable(),
                 TextColumn::make('team.event.name')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('team.name')
                     ->searchable()
+                    ->sortable(),
+                TextColumn::make('created_at')
+                    ->since()
+                    ->dateTimeTooltip()
                     ->sortable(),
             ])
             ->filters([
