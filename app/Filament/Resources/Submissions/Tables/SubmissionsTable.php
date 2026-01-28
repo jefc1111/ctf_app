@@ -9,6 +9,7 @@ use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Actions\ViewAction;
 use Filament\Tables\Filters\TrashedFilter;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 
 class SubmissionsTable
@@ -17,7 +18,9 @@ class SubmissionsTable
     {
         return $table
             ->columns([
-                //
+                TextColumn::make('team.event.name')
+                    ->searchable()
+                    ->sortable()
             ])
             ->filters([
                 TrashedFilter::make(),
