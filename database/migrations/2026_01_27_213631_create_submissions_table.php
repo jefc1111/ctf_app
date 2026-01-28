@@ -13,15 +13,15 @@ return new class extends Migration
     {
         Schema::create('submissions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('submission_category_id');
+            $table->foreignId('category_id');
             $table->foreignId('team_id');
             $table->foreignId('case_id');
             $table->string('name');
             $table->text('content');
-            $table->text('explanation');
+            $table->text('explanation')->nullable();
             $table->boolean('draft');
             $table->string('decision_status');
-            $table->text('decision_supporting_evidence');
+            $table->text('decision_supporting_evidence')->nullable();
             $table->timestamps();
             $table->softDeletes();
         });
