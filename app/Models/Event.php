@@ -5,11 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use OwenIt\Auditing\Auditable as AuditableTrait;
 
 class Event extends Model
 {
     use SoftDeletes;
     use HasFactory;
+    use AuditableTrait;
     
     protected $fillable = [
         'name',
