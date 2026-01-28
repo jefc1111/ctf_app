@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use App\Models\User;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -36,22 +38,22 @@ class Team extends Model implements Auditable
         });
     }
 
-    public function captain()
+    public function captain(): BelongsTo
     {
         return $this->belongsTo(User::class, 'captain_id');
     }
 
-    public function coach()
+    public function coach(): BelongsTo
     {
         return $this->belongsTo(User::class, 'coach_id');
     }
 
-    public function event()
+    public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
     }
 
-    public function members()
+    public function members(): HasMany
     {
         return $this->hasMany(User::class);
     }

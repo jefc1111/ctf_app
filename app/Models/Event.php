@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -20,12 +21,12 @@ class Event extends Model implements Auditable
         'end_time'
     ];
 
-    public function cases()
+    public function cases(): HasMany
     {
         return $this->hasMany(CaseModel::class);
     }
 
-    public function teams()
+    public function teams(): HasMany
     {
         return $this->hasMany(Team::class);
     }
