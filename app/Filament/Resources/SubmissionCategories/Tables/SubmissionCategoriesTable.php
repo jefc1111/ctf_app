@@ -23,6 +23,14 @@ class SubmissionCategoriesTable
                 TextColumn::make('points')
                     ->searchable()
                     ->sortable(),
+                TextColumn::make('submissions_count')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {                        
+                        default => 'gray',
+                    })
+                    ->label('Qty Submissions')
+                    ->sortable()
+                    ->counts('submissions'),
             ])
             ->filters([
                 TrashedFilter::make(),

@@ -155,7 +155,7 @@ class TestDataSeeder extends Seeder
 
     private function createTestSubmissions(array $teams): void
     {
-        $submissionCategrries = SubmissionCategory::all();
+        $submissionCategories = SubmissionCategory::all();
 
         $maxQtyTestSubmissions = 16;
 
@@ -167,7 +167,7 @@ class TestDataSeeder extends Seeder
             foreach (range(1, $qtySubmissionsForThisTeam) as $_i) {
                 Submission::factory()->create([
                     'team_id' => $team->id,
-                    'submission_category_id' => $submissionCategrries->random()->id,
+                    'category_id' => $submissionCategories->random()->id,
                     'case_id' => $team->event->cases->random()->id
                 ]);
             }
