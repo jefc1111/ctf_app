@@ -15,14 +15,13 @@ return new class extends Migration
             $table->id();
             $table->foreignId('submission_category_id');
             $table->foreignId('team_id');
-            $table->foreignId('event_id');
             $table->foreignId('case_id');
             $table->string('name');
-            $table->string('content');
-            $table->string('explanation');
+            $table->text('content');
+            $table->text('explanation');
             $table->boolean('draft');
             $table->string('decision_status');
-            $table->string('decision_supporting_evidence');
+            $table->text('decision_supporting_evidence');
             $table->timestamps();
             $table->softDeletes();
         });

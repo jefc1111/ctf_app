@@ -2,6 +2,8 @@
 
 namespace Database\Seeders;
 
+use App\Models\SubmissionCategory;
+use App\Models\Submission;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
@@ -23,7 +25,9 @@ class TestDataSeeder extends Seeder
 
         $testUsersByRoleCode = $this->createTestUsers();
 
-        $this->createTestTeams($testUsersByRoleCode, $events);
+        $teams = $this->createTestTeams($testUsersByRoleCode, $events);
+
+        $this->createTestSubmissions($teams);
     }
 
     private function createSuperUser(): void
@@ -81,6 +85,8 @@ class TestDataSeeder extends Seeder
         }
 
         $bar->finish();
+
+        $this->command->newLine();
         
         return $testUsersByRoleCode;
     }
@@ -112,6 +118,8 @@ class TestDataSeeder extends Seeder
 
                 $participantUser->save();
             }
+
+            $teams[] = $team;
         }
 
         return $teams;
@@ -143,5 +151,26 @@ class TestDataSeeder extends Seeder
         }
 
         return $events;
+    }
+
+    private function createTestSubmissions(array $teams): void
+    {
+        $submissionCategrries = SubmissionCategory::all();
+
+        $maxQtyTestSubmissions = 16;
+
+        $this->command->info("Creating up to $maxQtyTestSubmissions test Submissions per Team");
+
+        foreach ($teams as $team) {
+            $qtySubmissionsForThisTeam = rand(0, $maxQtyTestSubmissions);
+
+            foreach (range(1, $qtySubmissionsForThisTeam) as $_i) {
+                Submission::factory()->create([
+                    'team_id' => $team->id,
+                    'submission_category_id' => $submissionCategrries->random()->id,
+                    'case_id' => $team->event->cases->random()->id
+                ]);
+            }
+        }
     }
 }
