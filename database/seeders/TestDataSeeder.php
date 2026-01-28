@@ -167,7 +167,7 @@ class TestDataSeeder extends Seeder
             foreach (range(1, $qtySubmissionsForThisTeam) as $_i) {
                 Submission::factory()->create([
                     'team_id' => $team->id,
-                    'category_id' => $submissionCategories->random()->id,
+                    'submission_category_id' => $submissionCategories->random()->id,
                     'case_id' => $team->event->cases->random()->id
                 ]);
             }

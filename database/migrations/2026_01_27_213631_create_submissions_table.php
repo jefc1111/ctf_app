@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('submissions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('category_id');
+            $table->foreignId('submission_category_id');
             $table->foreignId('team_id');
             $table->foreignId('case_id');
             $table->string('name');

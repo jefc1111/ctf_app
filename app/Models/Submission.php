@@ -17,7 +17,7 @@ class Submission extends Model implements Auditable
     
     protected $fillable = [
         'name',
-        'category_id',
+        'submission_category_id',
         'team_id',
         'case_id',
         'content',
@@ -29,7 +29,7 @@ class Submission extends Model implements Auditable
 
     public function category(): BelongsTo
     {
-        return $this->belongsTo(SubmissionCategory::class);
+        return $this->belongsTo(SubmissionCategory::class, 'submission_category_id');
     }
 
     public function team(): BelongsTo
