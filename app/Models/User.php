@@ -3,6 +3,9 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\Hasone;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -74,27 +77,27 @@ class User extends Authenticatable implements Auditable
         ];
     }
 
-    public function team()
+    public function team(): BelongsTo
     {
         return $this->belongsTo(Team::class);
     }
 
-    public function captainedTeam()
+    public function captainedTeam(): HasOne
     {
         return $this->hasOne(Team::class, 'captain_id');
     }
 
-    public function coachedTeams()
+    public function coachedTeams(): HasMany
     {
         return $this->hasMany(Team::class, 'coach_id');
     }
 
-    public function mentor()
+    public function mentor(): BelongsTo
     {
         return $this->belongsTo(User::class);
     }
 
-    public function mentees()
+    public function mentees(): HasMany
     {
         return $this->hasMany(User::class);
     }
