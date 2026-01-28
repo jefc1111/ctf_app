@@ -5,10 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
 // `Case` is reserved in PHP
-class CaseModel extends Model
+class CaseModel extends Model implements Auditable
 {
     use SoftDeletes;
     use HasFactory;
