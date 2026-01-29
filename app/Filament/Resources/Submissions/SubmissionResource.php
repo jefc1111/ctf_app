@@ -18,6 +18,7 @@ use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Tapp\FilamentAuditing\RelationManagers\AuditsRelationManager;
 
 class SubmissionResource extends Resource
 {
@@ -49,7 +50,7 @@ class SubmissionResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            AuditsRelationManager::class
         ];
     }
 
