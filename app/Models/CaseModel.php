@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Contracts\Auditable;
@@ -23,8 +24,15 @@ class CaseModel extends Model implements Auditable
      */
     protected $table = 'cases';
 
+    protected $guarded = 'id';
+
     public function event(): BelongsTo
     {
         return $this->belongsTo(Event::class);
+    }
+
+    public function submissions(): hasMany
+    {
+        return $this->hasMany(Submission::class, 'case_id');
     }
 }

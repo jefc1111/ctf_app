@@ -22,22 +22,22 @@ class SubmissionCategoriesChart extends ChartWidget
                     'label' => 'Qty submissions',
                     'data' => $categories->map(fn($c) => $c->submissions_count),
                     'backgroundColor' => [
-                        '#8B7BA8', // Muted purple
-                        '#6B9AC4', // Dusty blue
-                        '#88B3A6', // Sage green
-                        '#C4A77D', // Warm tan
-                        '#D4918B', // Dusty rose
-                        '#9B8B7E', // Warm gray
-                        '#7BA8A3', // Teal
-                        '#B89B84', // Sandy beige
-                        '#A08DB5', // Soft lavender
-                        '#7D9BB3', // Steel blue
-                        '#96B88F', // Muted olive
-                        '#C9A88A', // Caramel
-                        '#B88E9D', // Mauve
-                        '#8FA39A', // Seafoam
-                        '#A89C8B', // Taupe
-                        '#87A3B8', // Powder blue
+                        '#9B7EDE', // Bright purple
+                        '#4E9FE5', // Vivid blue
+                        '#5FD4B8', // Bright teal
+                        '#F4A261', // Orange
+                        '#E76F51', // Coral
+                        '#E63946', // Red
+                        '#F48FB1', // Pink
+                        '#BA68C8', // Orchid
+                        '#7E57C2', // Deep purple
+                        '#42A5F5', // Sky blue
+                        '#26C6DA', // Cyan
+                        '#66BB6A', // Green
+                        '#9CCC65', // Lime
+                        '#FFCA28', // Amber
+                        '#FFA726', // Deep orange
+                        '#FF7043', // Burnt orange
                     ],
                 ],
             ],

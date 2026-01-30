@@ -31,7 +31,36 @@ class CasesTable
                     ->dateTimeTooltip()
                     ->sortable(),
                 TextColumn::make('source_url')
-                    ->formatStateUsing(fn (string $state): HtmlString => new HtmlString(self::sourceUrlFormatter($state)))
+                    ->color('gray')
+                    ->formatStateUsing(fn (string $state): HtmlString => new HtmlString(self::sourceUrlFormatter($state))),
+                TextColumn::make('submissions_count')
+                    ->badge()
+                    ->color(fn (string $state): string => match ($state) {
+                        '0' => 'gray',
+                        default => 'info'
+                    })
+                    ->label('Qty Submissions')
+                    ->sortable()
+                    ->counts('submissions'),
+                TextColumn::make('total_points')
+                    ->label('Total Points')
+                    ->numeric()
+                    ->getStateUsing(function ($record) {
+                        return $record->submissions()
+                            ->with('category')
+                            ->get()
+                            ->sum(function ($submission) {
+                                return $submission->category->points ?? 0;
+                            });
+                    })
+                    ->sortable(query: function ($query, string $direction) {
+                        return $query
+                            ->withSum(['submissions as total_points' => function ($query) {
+                                $query->join('submission_categories', 'submissions.submission_category_id', '=', 'submission_categories.id');
+                            }], 'submission_categories.points')
+                            ->orderBy('total_points', $direction);
+                    })
+                
             ])
             ->filters([
                 TrashedFilter::make(),
