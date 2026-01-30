@@ -14,7 +14,7 @@ class StatsOverview extends StatsOverviewWidget
     {
         return [
             Stat::make('Qty Teams', Team::count()),
-            Stat::make('Qty Contestants', User::role('Participant')->count()),
+            Stat::make('Qty Participants', User::role('Participant')->count()),
             Stat::make('Qty Submissions', Submission::count())
         ];
     }
