@@ -17,16 +17,12 @@ class CheckRole
         $user = auth()->user();
 
         if ($user->hasRole($roles)) {
-            // User HAS the required role - let them through!            
+            // User has the required role - let them through!            
             return $next($request);
         }
         
         // User is authenticated but doesn't have the right role
-        // Redirect them to their appropriate dashboard    
-        if ($user->hasRole([ 'Super Admin', 'Admin', 'Event staff' ])) {
-            return redirect()->intended('/admin');
-        }
-        
+        // Redirect them to the suitable dashboard            
         if ($user->hasRole([ 'Senior Coach', 'Coach' ])) {
             return redirect()->intended('/coach');
         }
@@ -38,6 +34,6 @@ class CheckRole
         // No matching role - send to default dashboard or show error
         abort(403, 'You do not have permission to access this area.');
 
-        return redirect('/dashboard');
+        //return redirect('/dashboard');
     }
 }

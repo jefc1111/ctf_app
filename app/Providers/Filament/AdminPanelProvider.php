@@ -76,8 +76,13 @@ class AdminPanelProvider extends PanelProvider
                     ->collapsible(false)            
             ])
             ->userMenuItems([
-                'profile' => fn (Action $action) => $action->url('/user/profile')
-                // Logout is handled by Filament automatically
+                'profile' => fn (Action $action) => $action->url('/user/profile'),
+                Action::make('participant-dashboard')
+                    ->url(fn (): string => '/participant')
+                    ->icon('heroicon-o-puzzle-piece'),
+                Action::make('coach-dashboard')
+                    ->url(fn (): string => '/coach')
+                    ->icon('heroicon-o-truck'),
             ])
             ->maxContentWidth(Width::ScreenTwoExtraLarge);
             //->strictAuthorization();

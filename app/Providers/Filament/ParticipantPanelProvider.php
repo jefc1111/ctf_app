@@ -19,13 +19,13 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Support\Enums\Width;
 use Filament\Actions\Action;
 
-class ContestantPanelProvider extends PanelProvider
+class ParticipantPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
-        $id = 'contestant';
+        $id = 'participant';
 
-        $path = 'contestant';
+        $path = 'participant';
 
         // Just because a role has access to this panel doesn't mean users of all these roles
         // will be able to do all things (e.g., Event Staff perhaps can't delete Submission Categories, etc etc...) 
@@ -33,7 +33,7 @@ class ContestantPanelProvider extends PanelProvider
             'Super Admin',
             'Admin',
             'Event staff',
-            'Contestant'            
+            'Participant'            
         ];
 
         return $panel
@@ -44,12 +44,12 @@ class ContestantPanelProvider extends PanelProvider
             ->colors([
                 'primary' => Color::Amber,
             ])
-            ->discoverResources(in: app_path('Filament/Contestant/Resources'), for: 'App\Filament\Contestant\Resources')
-            ->discoverPages(in: app_path('Filament/Contestant/Pages'), for: 'App\Filament\Contestant\Pages')
+            ->discoverResources(in: app_path('Filament/Participant/Resources'), for: 'App\Filament\Participant\Resources')
+            ->discoverPages(in: app_path('Filament/Participant/Pages'), for: 'App\Filament\Participant\Pages')
             ->pages([
                 Dashboard::class,
             ])
-            ->discoverWidgets(in: app_path('Filament/Contestant/Widgets'), for: 'App\Filament\Contestant\Widgets')
+            ->discoverWidgets(in: app_path('Filament/Participant/Widgets'), for: 'App\Filament\Participant\Widgets')
             ->widgets([])
             ->middleware([
                 EncryptCookies::class,
