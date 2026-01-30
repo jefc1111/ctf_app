@@ -10,22 +10,37 @@ use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Filament\Widgets\AccountWidget;
-use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use Filament\Support\Enums\Width;
+use Filament\Actions\Action;
 
 class ContestantPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
+        $id = 'contestant';
+
+        $path = 'contestant';
+
+        // Just because a role has access to this panel doesn't mean users of all these roles
+        // will be able to do all things (e.g., Event Staff perhaps can't delete Submission Categories, etc etc...) 
+        $allowedRoles = [
+            'Super Admin',
+            'Admin',
+            'Event staff',
+            'Contestant'            
+        ];
+
         return $panel
-            ->id('contestant')
-            ->path('contestant')
+            ->id($id)
+            ->path($path)
+            ->login(false)
+            ->authGuard('web') // Use Laravel's default web guard
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -35,10 +50,7 @@ class ContestantPanelProvider extends PanelProvider
                 Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Contestant/Widgets'), for: 'App\Filament\Contestant\Widgets')
-            ->widgets([
-                AccountWidget::class,
-                FilamentInfoWidget::class,
-            ])
+            ->widgets([])
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -52,6 +64,12 @@ class ContestantPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+                'role:'.implode(',', $allowedRoles)
+            ])
+            ->userMenuItems([
+                'profile' => fn (Action $action) => $action->url('/user/profile')
+                // Logout is handled by Filament automatically
+            ])
+            ->maxContentWidth(Width::ScreenTwoExtraLarge);
     }
 }

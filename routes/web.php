@@ -2,8 +2,27 @@
 
 use Illuminate\Support\Facades\Route;
 
+// Root redirects to login if not authenticated, or to appropriate dashboard if authenticated
 Route::get('/', function () {
-    return view('welcome');
+    if (auth()->check()) {
+        $user = auth()->user();
+        
+        if ($user->hasRole([ 'Super Admin', 'Admin', 'Event staff' ])) {
+            return redirect()->intended('/admin');
+        }
+        
+        if ($user->hasRole([ 'Senior Coach', 'Coach' ])) {
+            return redirect()->intended('/coach');
+        }
+        
+        if ($user->hasRole('Participant')) {
+            return redirect()->intended('/participant');
+        }
+        
+        return redirect('/dashboard');
+    }
+    
+    return redirect('/login'); // Jetstream's login
 });
 
 Route::middleware([
