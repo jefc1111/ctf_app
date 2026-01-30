@@ -10,8 +10,6 @@ use Filament\Pages\Dashboard;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
-use Filament\Widgets\AccountWidget;
-use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
 use Illuminate\Cookie\Middleware\EncryptCookies;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
@@ -20,18 +18,30 @@ use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Navigation\NavigationGroup;
 use Filament\Support\Enums\Width;
-
-use App\Filament\Widgets\StatsOverview;
+use Filament\Actions\Action;
 
 class AdminPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
+        $id = 'admin';
+
+        $path = 'admin';
+
+        // Just because a role has access to this panel doesn't mean users of all these roles
+        // will be able to do all things (e.g., Event Staff perhaps can't delete Submission Categories, etc etc...) 
+        $allowedRoles = [
+            'Super Admin',
+            'Admin',
+            'Event staff'
+        ];
+
         return $panel
             ->default()
-            ->id('admin')
-            ->path('admin')
-            ->login()
+            ->id($id)
+            ->path($path)
+            ->login(false)
+            ->authGuard('web') // Use Laravel's default web guard
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -41,11 +51,7 @@ class AdminPanelProvider extends PanelProvider
                 Dashboard::class,
             ])
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
-            ->widgets([
-                // StatsOverview::class
-                // AccountWidget::class,
-                // FilamentInfoWidget::class,
-            ])
+            ->widgets([])
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -59,6 +65,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
+                'role:'.implode(',', $allowedRoles)
             ])
             ->navigationGroups([
                 NavigationGroup::make()
@@ -67,6 +74,10 @@ class AdminPanelProvider extends PanelProvider
                 NavigationGroup::make()
                     ->label('Admin')
                     ->collapsible(false)            
+            ])
+            ->userMenuItems([
+                'profile' => fn (Action $action) => $action->url('/user/profile')
+                // Logout is handled by Filament automatically
             ])
             ->maxContentWidth(Width::ScreenTwoExtraLarge);
             //->strictAuthorization();
