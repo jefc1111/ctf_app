@@ -19,7 +19,7 @@ Route::get('/', function () {
             return redirect()->intended('/participant');
         }
         
-        return redirect('/dashboard');
+        return redirect('/');
     }
     
     return redirect('/login'); // Jetstream's login
@@ -31,6 +31,8 @@ Route::middleware([
     'verified',
 ])->group(function () {
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        return redirect('/');
+
+        //return view('dashboard');
     })->name('dashboard');
 });
