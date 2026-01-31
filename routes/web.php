@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 // Root redirects to login if not authenticated, or to appropriate dashboard if authenticated
-Route::get('/', function () {
+Route::get('/', function () {    
     if (auth()->check()) {
         $user = auth()->user();
         
@@ -18,8 +18,11 @@ Route::get('/', function () {
         if ($user->hasRole('Participant')) {
             return redirect()->intended('/participant');
         }
-        
-        return redirect('/');
+                
+        Auth::logout();
+
+        // Optionally, you can perform a redirect after logging out
+        return redirect('/login')->with('status', 'Invalid user: No roles assigned.'); 
     }
     
     return redirect('/login'); // Jetstream's login
