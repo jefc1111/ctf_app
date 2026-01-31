@@ -11,6 +11,7 @@ use App\Models\Team;
 use App\Models\Event;
 use App\Models\CaseModel;
 use Database\Seeders\PermissionsAndRolesSeeder;
+use Carbon\Carbon;
 
 class TestDataSeeder extends Seeder
 {
@@ -161,6 +162,8 @@ class TestDataSeeder extends Seeder
 
         $this->command->info("Creating up to $maxQtyTestSubmissions test Submissions per Team");
 
+        $now = Carbon::now();
+
         foreach ($teams as $team) {
             $qtySubmissionsForThisTeam = rand(0, $maxQtyTestSubmissions);
 
@@ -168,7 +171,8 @@ class TestDataSeeder extends Seeder
                 Submission::factory()->create([
                     'team_id' => $team->id,
                     'submission_category_id' => $submissionCategories->random()->id,
-                    'case_id' => $team->event->cases->random()->id
+                    'case_id' => $team->event->cases->random()->id,
+                    'created_at' => Carbon::now()->addMinutes(rand($_i - 3, $_i + 2))
                 ]);
             }
         }
