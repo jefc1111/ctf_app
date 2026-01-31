@@ -26,9 +26,7 @@ class ParticipantPanelProvider extends PanelProvider
         $id = 'participant';
 
         $path = 'participant';
-
-        // Just because a role has access to this panel doesn't mean users of all these roles
-        // will be able to do all things (e.g., Event Staff perhaps can't delete Submission Categories, etc etc...) 
+        
         $allowedRoles = [
             'Super Admin',
             'Admin',
