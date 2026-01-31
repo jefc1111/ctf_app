@@ -27,7 +27,7 @@ class CheckRole
             return redirect()->intended('/coach');
         }
         
-        if ($user->hasRole('Participant')) {
+        if ($user->hasRole('Participant')) {            
             return redirect()->intended('/participant');
         }
         
