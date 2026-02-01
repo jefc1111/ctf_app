@@ -57,9 +57,7 @@ class CreateNewUser implements CreatesNewUsers
                 ]), function (User $user) use ($ticketPurchase) {
                     $user->assignRole('Participant');
 
-                    $ticketPurchase->claimedBy()->associate($user);
-
-                    $ticketPurchase->save();
+                    $ticketPurchase->allocate($user);
 
                     //$this->createTeam($user);
                 });
