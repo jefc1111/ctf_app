@@ -10,8 +10,8 @@
             @csrf
 
             <div>
-                <x-label for="ticket-code" value="{{ __('Ticket code (links to event)') }}" />
-                <x-input id="ticket-code" class="block mt-1 w-full" type="text" name="ticket-code" :value="old('ticket-code')" required autofocus />
+                <x-label for="ticket_id" value="{{ __('Ticket id (cannot register without valid ticket id)') }}" />
+                <x-input id="ticket_id" class="block mt-1 w-full" type="text" name="ticket_id" :value="old('ticket_id')" required autofocus />
             </div>
 
             <div>
