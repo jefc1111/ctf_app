@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('submission_category_id');
             $table->foreignId('team_id');
             $table->foreignId('case_id');
+            $table->foreignId('owner_id');
             $table->string('name');
             $table->text('content');
             $table->text('explanation')->nullable();

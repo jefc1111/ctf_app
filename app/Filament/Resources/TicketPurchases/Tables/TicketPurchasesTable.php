@@ -9,6 +9,7 @@ use Filament\Actions\ViewAction;
 use Filament\Tables\Table;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\IconColumn;
+use Filament\Support\Icons\Heroicon;
 
 class TicketPurchasesTable
 {
@@ -16,16 +17,19 @@ class TicketPurchasesTable
     {
         return $table
             ->columns([
+                TextColumn::make('event.name'),
                 TextColumn::make('purchaser_email'),
                 TextColumn::make('ticket_id'),
                 TextColumn::make('discord_user'),
                 IconColumn::make('claimed')
                     ->boolean()
                     // ->trueIcon(Heroicon::PauseCircle)
-                    // ->falseIcon(Heroicon::PlayCircle)
-                    ->trueColor('green')
+                    ->falseIcon(Heroicon::MinusCircle)
+                    ->trueColor('success')
                     ->falseColor('gray'),
-                TextColumn::make('claimed_by_user.name'),
+                TextColumn::make('claimed_by_user.name')
+                    ->searchable()
+                    ->sortable(),
                 TextColumn::make('claimed_at')
                     ->since()
                     ->dateTimeTooltip()

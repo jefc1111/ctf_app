@@ -174,6 +174,7 @@ class TestDataSeeder extends Seeder
             foreach (range(1, $qtySubmissionsForThisTeam) as $_i) {
                 Submission::factory()->create([
                     'team_id' => $team->id,
+                    'owner_id' => $team->members->random(),
                     'submission_category_id' => $submissionCategories->random()->id,
                     'case_id' => $team->event->cases->random()->id,
                     'created_at' => Carbon::now()->addMinutes(rand($_i - 3, $_i + 2))
