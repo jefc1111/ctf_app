@@ -42,7 +42,9 @@ class TeamForm
                     ->searchable(['name', 'email'])
                     ->searchPrompt('Search participants by their name or email address')
                     ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->name} (email: {$record->email})")
-                    ->maxItems(4)
+                    ->maxItems(4),
+                TextInput::make('join_code')
+                    ->disabled()
             ]);
     }
 }
