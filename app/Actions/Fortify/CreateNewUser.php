@@ -34,11 +34,14 @@ class CreateNewUser implements CreatesNewUsers
                 'email' => $input['email'],
                 'password' => Hash::make($input['password']),
             ]), function (User $user) {
+                $user->assignRole('Participant');
+
                 //$this->createTeam($user);
             });
         });
     }
 
+    // This relates to Laravel Jetstream's own teams implementation which we are inoring in favour of our own
     /**
      * Create a personal team for the user.
      */
