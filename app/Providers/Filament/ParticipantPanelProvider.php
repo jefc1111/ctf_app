@@ -39,6 +39,7 @@ class ParticipantPanelProvider extends PanelProvider
             ->path($path)
             ->login(false)
             ->authGuard('web') // Use Laravel's default web guard
+            ->defaultAvatarProvider(\App\Filament\AvatarProviders\JetstreamProfilePhotoAvatarProvider::class)
             ->colors([
                 'primary' => Color::Amber,
             ])
