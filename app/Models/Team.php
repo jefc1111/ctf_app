@@ -42,7 +42,7 @@ class Team extends Model implements Auditable
             }
         });
 
-        // Set an 8 character code whe nthe model is initially created
+        // Set an 8 character code when the model is initially created
         static::created(function ($model) {
             // Generate code after the model is created (so we have an ID)
             $hashedId = substr(md5($model->id), 0, 4);
