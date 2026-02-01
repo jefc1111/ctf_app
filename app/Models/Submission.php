@@ -37,6 +37,11 @@ class Submission extends Model implements Auditable
         return $this->belongsTo(Team::class);
     }
 
+    public function owner(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
+    }
+
     public function case(): BelongsTo
     {
         return $this->belongsTo(CaseModel::class);

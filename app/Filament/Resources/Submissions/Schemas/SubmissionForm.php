@@ -8,6 +8,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\Select;
+use Filament\Schemas\Components\Section;
 
 use Filament\Schemas\Schema;
 
@@ -46,12 +47,17 @@ class SubmissionForm
                     ->rows(3),
                 Textarea::make('explanation')
                     ->columnSpan(2)
-                    ->rows(3),                
-                Select::make('decision_status')
-                    ->required()
-                    ->options(SubmissionDecisionStatus::toArray()),
-                Textarea::make('decision_supporting_evidence')                    
-                    ->rows(3),                
+                    ->rows(3),
+                Section::make('Coach decision')
+                    ->description('The status of the decision and the reasoning behind it (if applicable)')
+                    ->schema([
+                        Select::make('decision_status')
+                            ->required()
+                            ->options(SubmissionDecisionStatus::toArray()),
+                        Textarea::make('decision_supporting_evidence')                    
+                            ->rows(3),    
+                    ])
+                    ->collapsible()            
             ]);
     }
 }

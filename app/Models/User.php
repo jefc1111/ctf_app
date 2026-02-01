@@ -92,6 +92,11 @@ class User extends Authenticatable implements Auditable//, MustVerifyEmail
         return $this->hasMany(Team::class, 'coach_id');
     }
 
+    public function ticketPurchases(): HasMany
+    {
+        return $this->hasMany(TicketPurchase::class, 'claimed_by_user_id');
+    }
+
     public function mentor(): BelongsTo
     {
         return $this->belongsTo(User::class);
