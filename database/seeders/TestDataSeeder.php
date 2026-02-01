@@ -10,8 +10,10 @@ use App\Models\User;
 use App\Models\Team;
 use App\Models\Event;
 use App\Models\CaseModel;
+use App\Models\TicketPurchase;
 use Database\Seeders\PermissionsAndRolesSeeder;
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
 
 class TestDataSeeder extends Seeder
 {
@@ -29,6 +31,8 @@ class TestDataSeeder extends Seeder
         $teams = $this->createTestTeams($testUsersByRoleCode, $events);
 
         $this->createTestSubmissions($teams);
+
+        $this->createTestTicketPurchases($events, $testUsersByRoleCode['p']);
     }
 
     private function createSuperUser(): void
@@ -175,6 +179,21 @@ class TestDataSeeder extends Seeder
                     'created_at' => Carbon::now()->addMinutes(rand($_i - 3, $_i + 2))
                 ]);
             }
+        }
+    }
+
+    private function createTestTicketPurchases(array $events = [], array $participants = []): void
+    {
+        if (empty($events) || empty($participants)) {
+            return;
+        }
+
+        $event_id = $events[0]->id;
+
+        foreach (Arr::random($participants, 10) as $participant) {
+            TicketPurchase::factory()->create([
+                'event_id' => $event_id
+            ]);
         }
     }
 }

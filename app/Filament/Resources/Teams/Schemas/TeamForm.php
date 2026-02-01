@@ -32,6 +32,8 @@ class TeamForm
                         titleAttribute: 'name',
                         modifyQueryUsing: fn ($query) => $query->role(['Coach', 'Senior Coach'])
                     ),
+                TextInput::make('join_code')
+                    ->disabled(),
                 Select::make('members')
                     ->multiple()
                     ->relationship(
@@ -43,8 +45,7 @@ class TeamForm
                     ->searchPrompt('Search participants by their name or email address')
                     ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->name} (email: {$record->email})")
                     ->maxItems(4),
-                TextInput::make('join_code')
-                    ->disabled()
+
             ]);
     }
 }
