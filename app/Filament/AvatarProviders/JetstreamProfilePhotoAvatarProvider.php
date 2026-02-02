@@ -6,6 +6,7 @@ use Filament\Facades\Filament;
 use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Filament\AvatarProviders\Contracts\AvatarProvider;
+use Filament\AvatarProviders\UiAvatarsProvider;
 
 class JetstreamProfilePhotoAvatarProvider implements AvatarProvider
 {
@@ -13,6 +14,6 @@ class JetstreamProfilePhotoAvatarProvider implements AvatarProvider
     {
         return $record->profile_photo_path 
         ? asset('storage/'.$record->profile_photo_path)
-        : asset('images/default-avatar.png');
+        : (new UiAvatarsProvider())->get($record);
     }
 }
