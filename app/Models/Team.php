@@ -81,4 +81,9 @@ class Team extends Model implements Auditable
     {
         return $this->hasMany(User::class);
     }
+
+    public function submissions(): HasMany
+    {
+        return $this->hasMany(Submission::class);
+    }
 }
