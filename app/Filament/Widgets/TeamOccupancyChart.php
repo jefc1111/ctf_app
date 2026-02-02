@@ -9,6 +9,8 @@ class TeamOccupancyChart extends ChartWidget
 {
     protected ?string $heading = 'Team Occupancy';
 
+    protected static ?int $sort = 100;
+
     protected function getData(): array
     {
         $teamSizes = Team::withCount('members')

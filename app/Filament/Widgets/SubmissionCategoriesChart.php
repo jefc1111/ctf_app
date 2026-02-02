@@ -11,6 +11,8 @@ class SubmissionCategoriesChart extends ChartWidget
 
     protected string $color = 'info';
 
+    protected static ?int $sort = 70;
+
     protected function getData(): array
     {
         $categories = SubmissionCategory::withCount('submissions')
