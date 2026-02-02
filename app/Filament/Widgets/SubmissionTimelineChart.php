@@ -9,6 +9,8 @@ class SubmissionTimelineChart extends ChartWidget
 {
     protected ?string $heading = 'Submission Timeline';
 
+    protected static ?int $sort = 20;
+
     protected function getData(): array
     {
         $submissions = Submission::all();
