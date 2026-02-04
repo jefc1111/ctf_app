@@ -13,6 +13,7 @@ use Filament\Tables\Table;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreAction;
+use App\Models\Event;
 use Filament\Tables\Columns\Summarizers\Count;
 
 class EventsTable
@@ -28,6 +29,14 @@ class EventsTable
                     ->sortable(),
                 TextColumn::make('end_time')
                     ->sortable(),
+                TextColumn::make('progress_status')
+                    ->badge()
+                    ->state(fn (Event $record): string => $record->progressStatusText())
+                    ->color(fn (string $state): string => match ($state) {
+                        'Pending' => 'warning',
+                        'In Progress' => 'success',
+                        'Complete' => 'gray',
+                    }),
                 TextColumn::make('cases_count')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
