@@ -31,10 +31,13 @@ class CreateNewUser implements CreatesNewUsers
         ])->validate();
 
         // There should really only be one (or none) but we'll fetch all just in case
-        $ticketPurchases = TicketPurchase::where('ticket_id', $input['ticket_id'])->get();
+        $ticketPurchases = TicketPurchase::where([
+            'ticket_id' => $input['ticket_id'],
+            'claimed' => false
+        ])->get();
 
         if ($ticketPurchases->isEmpty()) {
-            \Log::warning("User registered with ticket id ".$input['ticket_id']." which does not match with any TicketPurchase");
+            \Log::warning("User registered with ticket id ".$input['ticket_id']." which does not match with any unclaimed TicketPurchase");
 
             abort(403, "Invalid ticket id");
         }
