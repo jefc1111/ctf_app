@@ -25,7 +25,12 @@ class AuditsTable
                 TextColumn::make('user.email')
                     ->searchable()                
                     ->label('Email'),
-                TextColumn::make('event'),
+                TextColumn::make('event')
+                    ->searchable(),
+                TextColumn::make('auditable_type')
+                    ->searchable(),
+                TextColumn::make('auditable.name')
+                    ->label('Audited item name (if applicable)'),
                 // TextColumn::make('created_at')
                 //     ->since(),
                 TextColumn::make('created_at')

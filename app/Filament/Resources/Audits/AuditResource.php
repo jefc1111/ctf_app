@@ -3,9 +3,8 @@
 namespace App\Filament\Resources\Audits;
 
 use App\Filament\Resources\Audits\Pages\ListAudits;
-use App\Filament\Resources\Audits\Pages\ViewAudit;
 use App\Filament\Resources\Audits\Schemas\AuditForm;
-use App\Filament\Resources\Audits\Schemas\AuditInfolist;
+use Tapp\FilamentAuditing\Filament\Resources\Audits\Schemas\AuditInfolist;
 use App\Filament\Resources\Audits\Tables\AuditsTable;
 use OwenIt\Auditing\Models\Audit;
 use BackedEnum;
@@ -52,8 +51,7 @@ class AuditResource extends Resource
     public static function getPages(): array
     {
         return [
-            'index' => ListAudits::route('/'),
-            'view' => ViewAudit::route('/{record}'),
+            'index' => ListAudits::route('/')
         ];
     }
 }
