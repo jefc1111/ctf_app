@@ -22,13 +22,13 @@ class CreateNewUser implements CreatesNewUsers
      */
     public function create(array $input): User
     {
-        Validator::make($input, [
+        $validator = Validator::make($input, [
             'ticket_id' => ['required', 'string', 'max:255'],
             'name' => ['required', 'string', 'max:255'],            
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => $this->passwordRules(),
             'terms' => Jetstream::hasTermsAndPrivacyPolicyFeature() ? ['accepted', 'required'] : '',
-        ])->validate();
+        ]);
 
         // There should really only be one (or none) but we'll fetch all just in case
         $ticketPurchases = TicketPurchase::where([
@@ -36,41 +36,52 @@ class CreateNewUser implements CreatesNewUsers
             'claimed' => false
         ])->get();
 
-        if ($ticketPurchases->isEmpty()) {
-            \Log::warning("User registered with ticket id ".$input['ticket_id']." which does not match with any unclaimed TicketPurchase");
+        $validator->after(function($validator) use ($ticketPurchases, $input) {
+            if ($ticketPurchases->isEmpty()) {
+                $claimedTicketExists = TicketPurchase::where([
+                    'ticket_id' => $input['ticket_id'],
+                    'claimed' => true
+                ])->exists();
+                
+                \Log::warning("Registration attempt with email {$input['email']} tried to claim ticket id ".$input['ticket_id']
+                ." which ".($claimedTicketExists ? "has already been claimed" : "does not match with any TicketPurchase"));
+                
+                $validator->errors()->add(
+                    'ticket_id', 'The provided ticket ID is invalid'.($claimedTicketExists ? ' or has already been claimed.' : null)
+                );
+            }
 
-            abort(403, "Invalid ticket id");
-        }
+            // This would be very surprising
+            if ($ticketPurchases->count() > 1) {
+                \Log::warning("User registered with ticket id ".$input['ticket_id']." which matches to multiple TicketPurchases");
 
-        // This would be very surprising
-        if ($ticketPurchases->count() > 1) {
-            \Log::warning("User registered with ticket id ".$input['ticket_id']." which matches to multiple TicketPurchases");
+                $validator->errors()->add(
+                    'ticket_id', "There is a problem with the ticket id"
+                );
+            }
+        });
 
-            abort(403, "There is a problem with the ticket id");
-        }
+        $validator->validate();
         
-        if ($ticketPurchases->count() === 1) {
-            $ticketPurchase = TicketPurchase::firstWhere('ticket_id', $input['ticket_id']);
+        // Now let's allocate the ticket purchase and create the user
+        $ticketPurchase = TicketPurchase::firstWhere('ticket_id', $input['ticket_id']);
 
-            return DB::transaction(function () use ($input, $ticketPurchase) {
-                return tap(User::create([
-                    'name' => $input['name'],
-                    'email' => $input['email'],
-                    'password' => Hash::make($input['password']),
-                ]), function (User $user) use ($ticketPurchase) {
-                    $user->assignRole('Participant');
+        return DB::transaction(function () use ($input, $ticketPurchase) {
+            return tap(User::create([
+                'name' => $input['name'],
+                'email' => $input['email'],
+                'password' => Hash::make($input['password']),
+            ]), function (User $user) use ($ticketPurchase) {
+                $user->assignRole('Participant');
 
-                    $ticketPurchase->allocate($user);
+                $ticketPurchase->allocate($user);
 
-                    //$this->createTeam($user);
-                });
+                //$this->createTeam($user);
             });
-        } else {
-            abort(403, "Unexpected error with ticket id");
-        }
+        });
     }
 
-    // This relates to Laravel Jetstream's own teams implementation which we are inoring in favour of our own
+    // This relates to Laravel Jetstream's own teams implementation which we are ignoring in favour of our own
     /**
      * Create a personal team for the user.
      */
