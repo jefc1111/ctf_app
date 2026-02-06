@@ -3,18 +3,15 @@
 namespace App\Filament\Participant\Pages;
 
 use Filament\Pages\Page;
-use Filament\Actions\Action;
 use App\Models\Event;
-use Filament\Infolists\Infolist;
 use Filament\Infolists\Components\TextEntry;
-use Filament\Infolists\Contracts\HasInfolists;
-use Filament\Infolists\Concerns\InteractsWithInfolists;
 use Filament\Schemas\Schema;
 use Filament\Infolists\Components\RepeatableEntry;
 use Filament\Schemas\Components\Section;
-use Filament\Infolists\Components\ImageEntry;
 use App\Models\CaseModel;
 use Filament\Schemas\Components\Grid;
+use BackedEnum;
+use Filament\Support\Icons\Heroicon;
 
 class EventCases extends Page
 {
@@ -24,9 +21,11 @@ class EventCases extends Page
 
     protected ?string $heading = 'Custom Page Heading';
 
+    protected static string|BackedEnum|null $navigationIcon = Heroicon::Flag;
+
     public function mount(): void
     {
-        $this->event = Event::first();
+        $this->event = Event::first(); // @TODO need to select more specifically
     }
 
     public function getHeading(): string
@@ -103,5 +102,17 @@ class EventCases extends Page
                     ->grid(2)
                     ->columnSpan(1),
             ]);
+    }
+
+    public static function getNavigationBadge(): ?string
+    {
+        $event = Event::first();
+
+        return $event && $event->isInProgress() ? 'in progress' : null; // @TODO need to select more specifically
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return 'success';
     }
 }
