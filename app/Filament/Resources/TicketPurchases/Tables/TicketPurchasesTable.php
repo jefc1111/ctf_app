@@ -27,7 +27,7 @@ class TicketPurchasesTable
                     ->falseIcon(Heroicon::MinusCircle)
                     ->trueColor('success')
                     ->falseColor('gray'),
-                TextColumn::make('claimed_by_user.name')
+                TextColumn::make('claimedBy.name')
                     ->searchable()
                     ->sortable(),
                 TextColumn::make('claimed_at')
