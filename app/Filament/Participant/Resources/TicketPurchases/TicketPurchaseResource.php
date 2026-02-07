@@ -45,7 +45,7 @@ class TicketPurchaseResource extends Resource
         return [
             'index' => ListTicketPurchases::route('/'),
             'create' => CreateTicketPurchase::route('/create'),
-            'edit' => EditTicketPurchase::route('/{record}/edit'),
+            // 'edit' => EditTicketPurchase::route('/{record}/edit'),
         ];
     }
 
