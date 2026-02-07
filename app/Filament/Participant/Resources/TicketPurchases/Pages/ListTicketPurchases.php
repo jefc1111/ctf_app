@@ -3,7 +3,7 @@
 namespace App\Filament\Participant\Resources\TicketPurchases\Pages;
 
 use App\Filament\Participant\Resources\TicketPurchases\TicketPurchaseResource;
-use Filament\Actions\CreateAction;
+use App\Filament\Actions\ClaimTicketAction;
 use Filament\Resources\Pages\ListRecords;
 
 class ListTicketPurchases extends ListRecords
@@ -13,7 +13,7 @@ class ListTicketPurchases extends ListRecords
     protected function getHeaderActions(): array
     {
         return [
-            // CreateAction::make(),
+            ClaimTicketAction::make(),
         ];
     }
 }
