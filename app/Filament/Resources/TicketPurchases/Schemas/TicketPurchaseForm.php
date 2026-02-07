@@ -32,7 +32,6 @@ class TicketPurchaseForm
                     ->schema([
                         Toggle::make('claimed'),
                         Select::make('claimed_by_user_id')
-                            ->required()
                             ->relationship(
                                 name: 'claimedBy', 
                                 titleAttribute: 'name'
