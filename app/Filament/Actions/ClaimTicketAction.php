@@ -14,13 +14,13 @@ class ClaimTicketAction extends Action
     {
         return 'claimTicket';
     }
-
+ 
     protected function setUp(): void
     {
         parent::setUp();
 
         $this
-            ->label('Claim Ticket')
+            ->label('Claim a ticket using a ticket order confirmation id')
             ->icon('heroicon-o-ticket')
             ->modal()
             ->form([
@@ -32,10 +32,11 @@ class ClaimTicketAction extends Action
                     ->helperText('Paste the ID from your ticket purchase confirmation'),
             ])
             ->action(function (array $data, Action $action): void {
-                $user = Auth::user();
+                $user = auth()->user();
+                
                 $ticketId = $data['ticket_id'];
                 
-                // Tier 2: Check if user has already claimed THIS specific ticket
+                // Check if user has already claimed THIS specific ticket
                 $alreadyClaimedByUser = TicketPurchase::where('ticket_id', $ticketId)
                     ->where('claimed_by_user_id', $user->id)
                     ->where('claimed', true)
@@ -49,13 +50,14 @@ class ClaimTicketAction extends Action
                         ->send();
                     
                     $action->halt();
+
                     return;
                 }
 
                 // Find ticket with matching ID (claimed or unclaimed)
                 $ticketPurchase = TicketPurchase::where('ticket_id', $ticketId)->first();
 
-                // Tier 4: No ticket found with this ID at all
+                // No ticket found with this ID at all
                 if (!$ticketPurchase) {
                     Notification::make()
                         ->danger()
@@ -64,10 +66,11 @@ class ClaimTicketAction extends Action
                         ->send();
                     
                     $action->halt();
+
                     return;
                 }
 
-                // Tier 3: Check if user has already claimed a different ticket for this event
+                // Check if user has already claimed a different ticket for this event
                 $existingClaimForEvent = TicketPurchase::where('event_id', $ticketPurchase->event_id)
                     ->where('claimed_by_user_id', $user->id)
                     ->where('claimed', true)
@@ -81,14 +84,15 @@ class ClaimTicketAction extends Action
                     Notification::make()
                         ->warning()
                         ->title('Event Ticket Already Claimed')
-                        ->body("You have already claimed a ticket for {$eventName}. Only one ticket per event can be claimed per user.")
+                        ->body("You have already claimed a ticket for '{$eventName}'. Only one ticket per event can be claimed per user.")
                         ->send();
                     
                     $action->halt();
+
                     return;
                 }
 
-                // Check if ticket is still unclaimed
+                // Check if ticket is already claimed
                 if ($ticketPurchase->claimed) {
                     Notification::make()
                         ->warning()
@@ -97,6 +101,7 @@ class ClaimTicketAction extends Action
                         ->send();
                     
                     $action->halt();
+
                     return;
                 }
 
@@ -110,7 +115,7 @@ class ClaimTicketAction extends Action
                 Notification::make()
                     ->success()
                     ->title('Ticket Claimed Successfully')
-                    ->body("You've successfully claimed the ticket for {$ticketPurchase->purchaser_email}")
+                    ->body("You've successfully claimed the ticket with id $ticketId purchased by {$ticketPurchase->purchaser_email}")
                     ->send();
                 
                 $action->success();
