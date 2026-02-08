@@ -55,4 +55,16 @@ class TicketPurchaseResource extends Resource
 
         return parent::getEloquentQuery()->where('claimed_by_user_id', $user->id);
     }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return static::getModel()::where('claimed_by_user_id', auth()->user()->id)->count();
+    }
+
+    public static function getNavigationBadgeColor(): ?string
+    {
+        return static::getModel()::where('claimed_by_user_id', auth()->user()->id)->count()
+        ? 'success' 
+        : 'danger';
+    }
 }
