@@ -15,6 +15,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\Team;
+use App\Models\Event;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 
@@ -105,5 +106,14 @@ class User extends Authenticatable implements Auditable//, MustVerifyEmail
     public function mentees(): HasMany
     {
         return $this->hasMany(User::class);
+    }
+
+    public function activeEvent(): ?Event
+    {
+        return $this->ticketPurchases->map(
+            fn($tp) => $tp->event
+        )
+        ->sortBy('start_time')
+        ->last();
     }
 }
