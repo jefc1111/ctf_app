@@ -22,9 +22,9 @@ class CaseModel extends Model implements Auditable
      *
      * @var string
      */
-    protected string $table = 'cases';
+    protected $table = 'cases';
 
-    protected array $guarded = ['id'];
+    protected $guarded = ['id'];
 
     public function event(): BelongsTo
     {
