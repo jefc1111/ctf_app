@@ -25,12 +25,12 @@ class EventCases extends Page
 
     public function mount(): void
     {
-        $this->event = Event::first(); // @TODO need to select more specifically
+        $this->event = auth()->user()->activeEvent();
     }
 
-    public function getHeading(): string
+    public function getHeading(): ?string
     {
-        return $this->event->name;
+        return $this->event?->name;
     }
 
     public function eventInfolist(Schema $schema): Schema
@@ -106,9 +106,9 @@ class EventCases extends Page
 
     public static function getNavigationBadge(): ?string
     {
-        $event = Event::first();
+        $event = auth()->user()->activeEvent();
 
-        return $event && $event->isInProgress() ? 'in progress' : null; // @TODO need to select more specifically
+        return $event && $event->isInProgress() ? 'in progress' : null;
     }
 
     public static function getNavigationBadgeColor(): ?string
