@@ -24,20 +24,20 @@ class SubmissionForm
                     ->required()
                     ->label('Submission category')
                     ->relationship(
-                        name: 'category', 
+                        name: 'category',
                         titleAttribute: 'name'
                     )
-                    ->getOptionLabelFromRecordUsing(fn (SubmissionCategory $record): ?string => $record->nameAndPoints()),
+                    ->getOptionLabelFromRecordUsing(fn(SubmissionCategory $record): ?string => $record->nameAndPoints()),
                 Select::make('team_id')
                     ->required()
                     ->relationship(
-                        name: 'team', 
+                        name: 'team',
                         titleAttribute: 'name'
                     ),
                 Select::make('case_id')
                     ->required()
                     ->relationship(
-                        name: 'case', 
+                        name: 'case',
                         titleAttribute: 'name'
                     ),
                 Toggle::make('draft'),
@@ -53,11 +53,19 @@ class SubmissionForm
                     ->schema([
                         Select::make('decision_status')
                             ->required()
+                            ->default('PENDING')
                             ->options(SubmissionDecisionStatus::toArray()),
-                        Textarea::make('decision_supporting_evidence')                    
-                            ->rows(3),    
+                        Textarea::make('decision_supporting_evidence')
+                            ->rows(3),
                     ])
-                    ->collapsible()            
+                    ->collapsible(),
+                Select::make('owner_id')
+                    ->default(auth()->user()->id)
+                    ->required()
+                    ->relationship(
+                        name: 'owner',
+                        titleAttribute: 'name'
+                    ),
             ]);
     }
 }
