@@ -20,7 +20,7 @@ class ClaimTicketAction extends Action
         parent::setUp();
 
         $this
-            ->label('Claim a ticket using a ticket order confirmation id')
+            ->label('Claim a ticket using a ticket order confirmation ID')
             ->icon('heroicon-o-ticket')
             ->modal()
             ->form([
