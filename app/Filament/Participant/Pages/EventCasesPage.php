@@ -13,7 +13,7 @@ use Filament\Schemas\Components\Grid;
 use BackedEnum;
 use Filament\Support\Icons\Heroicon;
 
-class EventCases extends Page
+class EventCasesPage extends Page
 {
     protected string $view = 'filament.participant.pages.event-cases';
 
