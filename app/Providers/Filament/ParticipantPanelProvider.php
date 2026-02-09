@@ -22,6 +22,7 @@ class ParticipantPanelProvider extends PanelProvider
         ];
         
         return SharedPanelConfiguration::applyDefaults($panel, $panelId, $panelPath, $allowedRoles)
+            ->globalSearch(false)
             ->discoverResources(in: app_path('Filament/Participant/Resources'), for: 'App\Filament\Participant\Resources')
             ->discoverPages(in: app_path('Filament/Participant/Pages'), for: 'App\Filament\Participant\Pages')
             ->discoverWidgets(in: app_path('Filament/Participant/Widgets'), for: 'App\Filament\Participant\Widgets')
