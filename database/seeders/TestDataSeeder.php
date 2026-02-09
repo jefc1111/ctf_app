@@ -211,7 +211,7 @@ class TestDataSeeder extends Seeder
         foreach (Arr::random($participants, floor(count($participants) / 2)) as $participant) {
             TicketPurchase::factory()->create([
                 'event_id' => $event_id,
-                'created_at' => fake()->dateTimeBetween('-8 week', 'now') 
+                'created_at' => fake()->dateTimeBetween('-20 week', 'now') 
             ]);
         }
     }
