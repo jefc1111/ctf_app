@@ -17,7 +17,6 @@ class PermissionsAndRolesSeeder extends Seeder
         'es' => 'Event Staff',
         'sc' => 'Senior Coach',
         'c' => 'Coach',
-        /* 'tc' => 'Team Captain', */ // I think this is going to be handles separately in Jetsream's Teams implementation
         'p' => 'Participant'
     ];
 
