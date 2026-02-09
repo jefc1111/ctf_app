@@ -27,7 +27,7 @@ class JoinOrCreateTeamAction extends Action
         parent::setUp();
 
         $this
-            ->label('Join / Create Team')
+            ->label('Join / Create Team UNTESTED')
             ->icon('heroicon-o-user-group')
             ->color('primary')
             ->modal()
