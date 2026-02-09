@@ -44,6 +44,6 @@ class Submission extends Model implements Auditable
 
     public function case(): BelongsTo
     {
-        return $this->belongsTo(CaseModel::class);
+        return $this->belongsTo(CaseModel::class, 'case_id');
     }
 }
