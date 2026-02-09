@@ -16,38 +16,40 @@ class TicketPurchaseTimelineChart extends BarChartWidget
     {
         $ticketPurchases = TicketPurchase::all();
 
-        // Group submissions by day and count them
-        $groupedData = $ticketPurchases->groupBy(function($ticketPurchase) {
-            return $ticketPurchase->created_at->format('Y-m-d');
-        })->map(function($group) {
-            return $group->count();
-        });
+        if (! $ticketPurchases->isEmpty()) {
+            // Group submissions by day and count them
+            $groupedData = $ticketPurchases->groupBy(function($ticketPurchase) {
+                return $ticketPurchase->created_at->format('Y-m-d');
+            })->map(function($group) {
+                return $group->count();
+            });
 
-        // Get the date range
-        $startDate = $ticketPurchases->min('created_at')->startOfDay();
-        $endDate = $ticketPurchases->max('created_at')->startOfDay();
+            // Get the date range
+            $startDate = $ticketPurchases->min('created_at')->startOfDay();
+            $endDate = $ticketPurchases->max('created_at')->startOfDay();
 
-        // Create array with all dates in range
-        $timelineData = collect();
-        $currentDate = $startDate->copy();
+            // Create array with all dates in range
+            $timelineData = collect();
+            $currentDate = $startDate->copy();
 
-        while ($currentDate <= $endDate) {
-            $dateKey = $currentDate->format('Y-m-d');
-            $timelineData[$dateKey] = $groupedData->get($dateKey, 0);
-            $currentDate->addDay();
+            while ($currentDate <= $endDate) {
+                $dateKey = $currentDate->format('Y-m-d');
+                $timelineData[$dateKey] = $groupedData->get($dateKey, 0);
+                $currentDate->addDay();
+            }
         }
 
         return [
             'datasets' => [
                 [
                     'label' => 'Qty ticket purchases',
-                    'data' => $timelineData->values()->toArray(),
+                    'data' => $ticketPurchases->isEmpty() ? [] : $timelineData->values()->toArray(),
                     'backgroundColor' => 'green',
                     'borderColor' => 'green',
                     'barThickness' => 2
                 ],
             ],
-            'labels' => $timelineData->keys()->toArray(),
+            'labels' => $ticketPurchases->isEmpty() ? [] : $timelineData->keys()->toArray(),
         ];
     }
 
