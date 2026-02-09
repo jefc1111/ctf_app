@@ -161,7 +161,7 @@ class TestDataSeeder extends Seeder
             $event = Event::factory()->create();
 
             // Make sure the first event created gets a full set of cases, the others get randomised amounts of cases
-            $qtyCasesForThisEvent = $i === 0 ? $maxQtyCasesPerEvent : rand(0, $maxQtyCasesPerEvent);
+            $qtyCasesForThisEvent = $i === 1 ? $maxQtyCasesPerEvent : rand(0, $maxQtyCasesPerEvent);
             
             foreach (range(1, $qtyCasesForThisEvent) as $_i) {
                 CaseModel::factory()->create([
