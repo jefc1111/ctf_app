@@ -77,7 +77,12 @@
                 initCountdown();
             </script>
         @endscript
-        {{ $this->eventInfolist }}
+        @if ($this->event->isInProgress())
+            {{ $this->eventInfolist }}
+        @else
+            <p>Case details will show here.</p> 
+            <p>Please refresh the page when the event has started.</p>
+        @endif
     @else
         No active event 
     @endif
