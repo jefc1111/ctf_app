@@ -3,21 +3,21 @@
 namespace App\Filament\Widgets;
 
 use Filament\Widgets\ChartWidget;
-use App\Models\Submission;
+use App\Models\TicketPurchase;
 
-class SubmissionTimelineChart extends ChartWidget
+class TicketPurchaseTimelineChart extends ChartWidget
 {
-    protected ?string $heading = 'Submission Timeline';
+    protected ?string $heading = 'Ticket Purchase Timeline';
 
     protected static ?int $sort = 20;
 
     protected function getData(): array
     {
-        $submissions = Submission::all();
+        $ticketPurchases = TicketPurchase::all();
 
         // Group submissions by minute and count them
-        $timelineData = $submissions->groupBy(function($submission) {
-            return $submission->created_at->format('Y-m-d H:i');
+        $timelineData = $ticketPurchases->groupBy(function($ticketPurchase) {
+            return $ticketPurchase->created_at->format('Y-m-d');
         })->map(function($group) {
             return $group->count();
         })->sortKeys(); // Sort by datetime
@@ -25,10 +25,11 @@ class SubmissionTimelineChart extends ChartWidget
         return [
             'datasets' => [
                 [
-                    'label' => 'Submission timeline',
+                    'label' => 'Ticket Purchase timeline',
                     'data' => $timelineData->values()->toArray(),
-                    'backgroundColor' => 'purple',
-                    'borderColor' => 'purple'
+                    'backgroundColor' => 'green',
+                    'borderColor' => 'green'
+
                 ],
             ],
             'labels' => $timelineData->keys()->toArray(),
