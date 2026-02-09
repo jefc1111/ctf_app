@@ -108,11 +108,11 @@ class EventCasesPage extends Page
     {
         $event = auth()->user()->activeEvent();
 
-        if ($event->isInProgress()) {
+        if ($event?->isInProgress()) {
             return 'in progress';
         }
 
-        if ($event->isPending()) {
+        if ($event?->isPending()) {
             return 'starting soon';
         }
 
@@ -123,7 +123,7 @@ class EventCasesPage extends Page
     {
         $event = auth()->user()->activeEvent();
 
-        return $event->isInProgress() 
+        return $event?->isInProgress() 
         ? 'success'
         : 'warning';
     }
