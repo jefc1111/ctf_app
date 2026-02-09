@@ -28,7 +28,7 @@ class CheckRole
         }
         
         if ($user->hasRole('Participant')) {            
-            return redirect()->intended('/participant/event-cases');
+            return redirect()->intended('/participant/live-event');
         }
         
         // No matching role - send to default dashboard or show error

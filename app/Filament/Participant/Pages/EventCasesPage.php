@@ -21,6 +21,8 @@ class EventCasesPage extends Page
 
     protected ?string $heading = 'Custom Page Heading';
 
+    protected static ?string $slug = 'live-event';
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Flag;
 
     public function mount(): void
