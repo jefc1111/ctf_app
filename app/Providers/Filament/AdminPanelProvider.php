@@ -5,6 +5,7 @@ namespace App\Providers\Filament;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Navigation\NavigationGroup;
+use Filament\Pages\Dashboard;
 
 class AdminPanelProvider extends PanelProvider
 {   
@@ -27,6 +28,9 @@ class AdminPanelProvider extends PanelProvider
             ->discoverPages(in: app_path('Filament/Pages'), for: 'App\Filament\Pages')
             ->discoverWidgets(in: app_path('Filament/Widgets'), for: 'App\Filament\Widgets')
             ->widgets([])
+            ->pages([
+                Dashboard::class,
+            ])
             ->navigationGroups([
                 NavigationGroup::make()
                     ->label('CTF')
