@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\CaseModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -35,9 +36,16 @@ class Event extends Model implements Auditable
         ];
     }
 
+    // Just a proxy method. We need `caseModels()` because Filament auto-builds the method name when associating newly
+    // created Cases with an Event. 
+    public function caseModels(): HasMany
+    {
+        return $this->cases();
+    }
+
     public function cases(): HasMany
     {
-        return $this->hasMany(CaseModel::class);
+        return $this->hasMany(CaseModel::class);        
     }
 
     public function teams(): HasMany
