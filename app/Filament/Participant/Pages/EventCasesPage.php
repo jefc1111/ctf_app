@@ -62,7 +62,7 @@ class EventCasesPage extends Page
                     TextEntry::make('missing_from')
                         ->inlineLabel(),
                     TextEntry::make('source_url')
-                            ->url(fn (CaseModel $record): string => $record->source_url)
+                            ->url(fn (CaseModel $record): ?string => $record->source_url)
                             ->openUrlInNewTab(),
                     TextEntry::make('characteristics'),
                     TextEntry::make('disappearance_details'), 
@@ -108,11 +108,23 @@ class EventCasesPage extends Page
     {
         $event = auth()->user()->activeEvent();
 
-        return $event && $event->isInProgress() ? 'in progress' : null;
+        if ($event->isInProgress()) {
+            return 'in progress';
+        }
+
+        if ($event->isPending()) {
+            return 'starting soon';
+        }
+
+        return null;
     }
 
     public static function getNavigationBadgeColor(): ?string
     {
-        return 'success';
+        $event = auth()->user()->activeEvent();
+
+        return $event->isInProgress() 
+        ? 'success'
+        : 'warning';
     }
 }
