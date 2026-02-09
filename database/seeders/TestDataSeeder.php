@@ -62,20 +62,37 @@ class TestDataSeeder extends Seeder
             abort(400, "No TEST_USER_PASSWORD set in .env");
         }
 
-        $qtyUsersPerRole = 50;
+        $qtyUsersPerRole = [
+            'a' => 4,
+            'es' => 8,
+            'sc' => 10,
+            'c' => 25, 
+            'p' => 202
+        ];
+
+        $defaultQty = 23;
 
         $testUsersByRoleCode = [];
 
-        $this->command->info("Creating $qtyUsersPerRole Users per Role");
-
-        $total = $qtyUsersPerRole * count(PermissionsAndRolesSeeder::nonSuperAdminRoles());
+        $total = array_sum($qtyUsersPerRole) 
+        + ($defaultQty * (\count(PermissionsAndRolesSeeder::nonSuperAdminRoles()) - \count($qtyUsersPerRole)));
+        
         $bar = $this->command->getOutput()->createProgressBar($total);
+        
         $bar->start();
         
         foreach (PermissionsAndRolesSeeder::nonSuperAdminRoles() as $roleCode => $roleName) {
             $testUsersByRoleCode[$roleCode] = [];
 
-            foreach (range(1, $qtyUsersPerRole) as $_i) {
+            $qtyToCreateForRole = array_key_exists($roleCode, $qtyUsersPerRole) 
+            ? $qtyUsersPerRole[$roleCode] 
+            : $defaultQty;
+            
+            $this->command->newLine();
+            $this->command->info("Creating $qtyToCreateForRole Users for role '$roleName'");
+            $this->command->newLine();
+            
+            foreach (range(1, $qtyToCreateForRole) as $_i) {
                 $user = User::factory()->create([
                     'name'     => fake()->name()." ($roleCode)",
                     'password' => bcrypt($password),
@@ -191,9 +208,10 @@ class TestDataSeeder extends Seeder
 
         $event_id = $events[0]->id;
 
-        foreach (Arr::random($participants, 10) as $participant) {
+        foreach (Arr::random($participants, floor(count($participants) / 2)) as $participant) {
             TicketPurchase::factory()->create([
-                'event_id' => $event_id
+                'event_id' => $event_id,
+                'created_at' => fake()->dateTimeBetween('-8 week', 'now') 
             ]);
         }
     }
