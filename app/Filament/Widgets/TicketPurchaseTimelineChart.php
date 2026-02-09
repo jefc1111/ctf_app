@@ -8,7 +8,7 @@ use App\Models\TicketPurchase;
 
 class TicketPurchaseTimelineChart extends BarChartWidget
 {
-    protected ?string $heading = 'Ticket Purchase Timeline';
+    protected ?string $heading = 'Ticket Purchase History';
 
     protected static ?int $sort = 20;
 
