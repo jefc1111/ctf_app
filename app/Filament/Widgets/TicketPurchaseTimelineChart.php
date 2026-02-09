@@ -3,9 +3,10 @@
 namespace App\Filament\Widgets;
 
 use Filament\Widgets\ChartWidget;
+use Filament\Widgets\BarChartWidget;
 use App\Models\TicketPurchase;
 
-class TicketPurchaseTimelineChart extends ChartWidget
+class TicketPurchaseTimelineChart extends BarChartWidget
 {
     protected ?string $heading = 'Ticket Purchase Timeline';
 
@@ -15,29 +16,53 @@ class TicketPurchaseTimelineChart extends ChartWidget
     {
         $ticketPurchases = TicketPurchase::all();
 
-        // Group submissions by minute and count them
-        $timelineData = $ticketPurchases->groupBy(function($ticketPurchase) {
+        // Group submissions by day and count them
+        $groupedData = $ticketPurchases->groupBy(function($ticketPurchase) {
             return $ticketPurchase->created_at->format('Y-m-d');
         })->map(function($group) {
             return $group->count();
-        })->sortKeys(); // Sort by datetime
+        });
+
+        // Get the date range
+        $startDate = $ticketPurchases->min('created_at')->startOfDay();
+        $endDate = $ticketPurchases->max('created_at')->startOfDay();
+
+        // Create array with all dates in range
+        $timelineData = collect();
+        $currentDate = $startDate->copy();
+
+        while ($currentDate <= $endDate) {
+            $dateKey = $currentDate->format('Y-m-d');
+            $timelineData[$dateKey] = $groupedData->get($dateKey, 0);
+            $currentDate->addDay();
+        }
 
         return [
             'datasets' => [
                 [
-                    'label' => 'Ticket Purchase timeline',
+                    'label' => 'Qty ticket purchases',
                     'data' => $timelineData->values()->toArray(),
                     'backgroundColor' => 'green',
-                    'borderColor' => 'green'
-
+                    'borderColor' => 'green',
+                    'barThickness' => 2
                 ],
             ],
             'labels' => $timelineData->keys()->toArray(),
         ];
     }
 
-    protected function getType(): string
+    protected function getOptions(): array
     {
-        return 'line';
+        return [
+            'scales' => [
+                'y' => [
+                    'beginAtZero' => true,
+                    'ticks' => [
+                        'stepSize' => 1,
+                        'precision' => 0,
+                    ],
+                ],
+            ],
+        ];
     }
 }
