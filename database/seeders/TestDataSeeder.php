@@ -67,7 +67,7 @@ class TestDataSeeder extends Seeder
             'es' => 8,
             'sc' => 10,
             'c' => 25, 
-            'p' => 202
+            'p' => env('QTY_TEST_PARTICIPANTS', 1002)
         ];
 
         $defaultQty = 23;
