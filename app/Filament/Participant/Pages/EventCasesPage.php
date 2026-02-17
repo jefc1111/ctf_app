@@ -12,6 +12,7 @@ use App\Models\CaseModel;
 use Filament\Schemas\Components\Grid;
 use BackedEnum;
 use Filament\Support\Icons\Heroicon;
+use App\Filament\Actions\CreateSubmissionAction;
 
 class EventCasesPage extends Page
 {
@@ -25,6 +26,8 @@ class EventCasesPage extends Page
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Flag;
 
+    public ?Event $event = null;
+    
     public function mount(): void
     {
         $this->event = auth()->user()->activeEvent();
@@ -50,6 +53,9 @@ class EventCasesPage extends Page
                     TextEntry::make('age'),
                     TextEntry::make('height'),
                     TextEntry::make('weight')                                  
+                ])
+                ->headerActions([
+                    CreateSubmissionAction::make(),
                 ]);
 
             $caseDetailsSection->collapsed()
