@@ -18,6 +18,7 @@ class Submission extends Model implements Auditable
     protected $fillable = [
         'name',
         'submission_category_id',
+        'owner_id',
         'team_id',
         'case_id',
         'content',
