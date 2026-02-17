@@ -43,6 +43,7 @@ class User extends Authenticatable implements Auditable//, MustVerifyEmail
         'name',
         'email',
         'password',
+        'team_id'
     ];
 
     /*
@@ -115,5 +116,19 @@ class User extends Authenticatable implements Auditable//, MustVerifyEmail
         )
         ->sortBy('start_time')
         ->last();
+    }
+
+    public function isCaptain(): bool
+    {
+        return $this->captainedTeam && $this->captainedTeam->id === $this->team->id;
+    }
+
+    public function inTeamForTicketPurchase(TicketPurchase $ticketPurchase): bool
+    {
+        if ($ticketPurchase->claimedBy->id !== $this->id) {
+            return false;
+        }
+
+        return $this->team && $this->team->event_id === $ticketPurchase->event->id;
     }
 }

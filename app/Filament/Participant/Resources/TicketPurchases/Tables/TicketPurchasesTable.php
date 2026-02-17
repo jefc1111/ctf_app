@@ -7,6 +7,10 @@ use Filament\Tables\Table;
 use App\Models\TicketPurchase;
 use App\Filament\Actions\ReleaseTicketClaimAction;
 use App\Filament\Actions\JoinOrCreateTeamAction;
+use App\Filament\Actions\TransferCaptaincyAction;
+use App\Filament\Actions\LeaveTeamAction;
+use Filament\Actions\ActionGroup;
+use Filament\Support\Enums\Size;
 
 class TicketPurchasesTable
 {
@@ -21,66 +25,70 @@ class TicketPurchasesTable
                 TextColumn::make('claimed_at')
                     ->dateTime()
                     ->sortable(),
+                TextColumn::make('progress_status')
+                    ->label('Event Status')
+                    ->badge()
+                    ->state(fn (TicketPurchase $ticketPurchase): string => $ticketPurchase->event->progressStatusText())
+                    ->color(fn (string $state): string => match ($state) {
+                        'Pending' => 'warning',
+                        'In Progress' => 'success',
+                        'Complete' => 'gray',
+                    }),
                 TextColumn::make('team_status')
                     ->label('Team Status')
-                    ->state(function (TicketPurchase $record): string {
+                    ->state(function (TicketPurchase $ticketPurchase): string {
                         $user = auth()->user();
-                        // \Log::error($record);
-                        \Log::error($user->team);
+
                         // Only show for tickets claimed by current user
-                        if ($record->claimed_by_user_id !== $user->id) {
+                        if ($ticketPurchase->claimedBy->id !== $user->id) {
                             return '—';
                         }
 
                         // Check if user has a team for this event
-                        if ($user->team && $user->team->event_id === $record->event_id) {
+                        if ($user->inTeamForTicketPurchase($ticketPurchase)) {
                             $teamName = $user->team->name;
-                            $isCaptain = $user->captainedTeam && $user->captainedTeam->id === $user->team->id;
 
-                            return $isCaptain ? "⭐ {$teamName} (Captain)" : "✓ {$teamName}";
+                            return $user->isCaptain() ? "⭐ {$teamName} (Captain)" : "✓ {$teamName}";
                         }
 
                         return 'No Team';
                     })
                     ->badge()
-                    ->color(function (TicketPurchase $record): string {
+                    ->color(function (TicketPurchase $ticketPurchase): string {
                         $user = auth()->user();
 
-                        if ($record->claimed_by_user_id !== $user->id) {
+                        if ($ticketPurchase->claimedBy->id !== $user->id) {
                             return 'gray';
                         }
 
-                        if ($user->team && $user->team->event_id === $record->event_id) {
-                            $isCaptain = $user->captainedTeam && $user->captainedTeam->id === $user->team->id;
-                            return $isCaptain ? 'success' : 'info';
+                        if ($user->inTeamForTicketPurchase($ticketPurchase)) {       
+                            return $user->isCaptain() ? 'success' : 'info';
                         }
 
                         return 'warning';
                     }),
-
-                // TextColumn::make('created_at')
-                //     ->dateTime()
-                //     ->sortable()
-                //     ->toggleable(isToggledHiddenByDefault: true),
-                // TextColumn::make('updated_at')
-                //     ->dateTime()
-                //     ->sortable()
-                //     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->actions([
-                JoinOrCreateTeamAction::make()
-                    ->visible(function (TicketPurchase $record): bool {
-                        $user = auth()->user();
-
-                        // Only show if ticket is claimed by current user
-                        if ($record->claimed_by_user_id !== $user->id) {
-                            return false;
-                        }
-
-                        // Only show if user doesn't have a team for this event
-                        return !($user->team && $user->team->event_id === $record->event_id);
-                    }),
-                ReleaseTicketClaimAction::make(),
+                ActionGroup::make([
+                    // Show if ticket purchase is for current user, and user not already in a team for the ticket purchase's event
+                    JoinOrCreateTeamAction::make()
+                        ->disabled(fn(TicketPurchase $tp): bool => auth()->user()->inTeamForTicketPurchase($tp)),                    
+                    // Show if user is captain of a team for this event
+                    TransferCaptaincyAction::make(),
+                    // Show if user is in a team for the event, but not captain
+                    LeaveTeamAction::make(),
+                    // Show if user is not in any team for this event
+                    ReleaseTicketClaimAction::make()
+                        ->disabled(fn(TicketPurchase $tp): bool => auth()->user()->inTeamForTicketPurchase($tp))
+                        ->tooltip(function(TicketPurchase $tp): string {
+                            return auth()->user()->inTeamForTicketPurchase($tp)
+                            ? "You must leave your team first"
+                            : null;
+                        })
+                ])
+                ->size(Size::Small)
+                ->label('Team Actions')
+                ->button()
             ])
             ->filters([
                 //
