@@ -19,9 +19,8 @@ class ReleaseTicketClaimAction extends Action
         parent::setUp();
 
         $this
-            ->label('Release Claim')
+            ->label('Release Ticket Claim')
             ->icon('heroicon-o-document-minus')
-            ->color('warning')
             ->requiresConfirmation()
             ->modalHeading('Release Ticket Claim')
             ->modalDescription('Are you sure you want to release your claim on this ticket? You will be able to claim another ticket for this event afterwards.')

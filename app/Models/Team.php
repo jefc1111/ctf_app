@@ -21,7 +21,8 @@ class Team extends Model implements Auditable
     protected $fillable = [
         'name',
         'captain_id',
-        'coach_id'
+        'coach_id',
+        'event_id'
     ];
 
     protected $guarded = [

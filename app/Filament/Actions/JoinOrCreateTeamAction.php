@@ -27,9 +27,8 @@ class JoinOrCreateTeamAction extends Action
         parent::setUp();
 
         $this
-            ->label('Join / Create Team UNTESTED')
-            ->icon('heroicon-o-user-group')
-            ->color('primary')
+            ->label('Join / Create Team')
+            ->icon('heroicon-o-user-group')            
             ->modal()
             ->modalHeading('Join or Create a Team')
             ->modalWidth('lg')
@@ -88,7 +87,12 @@ class JoinOrCreateTeamAction extends Action
             });
     }
 
-    protected function createTeam(User $user, int $eventId, string $teamName, Action $action): void
+    protected function createTeam(
+        User $user, 
+        int $eventId,
+        string $teamName, 
+        Action $action
+    ): void
     {
         // Check if user is already a captain of another team
         if ($user->captainedTeam) {
@@ -106,8 +110,7 @@ class JoinOrCreateTeamAction extends Action
         $team = Team::create([
             'name' => $teamName,
             'event_id' => $eventId,
-            'captain_id' => $user->id,
-            'join_code' => Str::upper(Str::random(8)),
+            'captain_id' => $user->id
         ]);
 
         // Associate user with team
@@ -122,7 +125,12 @@ class JoinOrCreateTeamAction extends Action
         $action->success();
     }
 
-    protected function joinTeam(User $user, int $eventId, string $joinCode, Action $action): void
+    protected function joinTeam(
+        User $user, 
+        int $eventId, 
+        string $joinCode, 
+        Action $action
+    ): void
     {
         // Find team by join code
         $team = Team::where('join_code', $joinCode)
