@@ -74,16 +74,23 @@ class TicketPurchasesTable
                     JoinOrCreateTeamAction::make()
                         ->disabled(fn(TicketPurchase $tp): bool => auth()->user()->inTeamForTicketPurchase($tp)),                    
                     // Show if user is captain of a team for this event
-                    TransferCaptaincyAction::make(),
+                    TransferCaptaincyAction::make()
+                        ->disabled(fn(TicketPurchase $tp): bool => ! auth()->user()->isCaptain()),
                     // Show if user is in a team for the event, but not captain
-                    LeaveTeamAction::make(),
+                    LeaveTeamAction::make()
+                        ->disabled(fn(TicketPurchase $tp): bool => ! auth()->user()->inTeamForTicketPurchase($tp) || auth()->user()->isCaptain())
+                        ->tooltip(function(TicketPurchase $tp): string {
+                            return auth()->user()->isCaptain()
+                            ? "You must transfer captaincy first"
+                            : "";
+                        }),
                     // Show if user is not in any team for this event
                     ReleaseTicketClaimAction::make()
                         ->disabled(fn(TicketPurchase $tp): bool => auth()->user()->inTeamForTicketPurchase($tp))
                         ->tooltip(function(TicketPurchase $tp): string {
                             return auth()->user()->inTeamForTicketPurchase($tp)
                             ? "You must leave your team first"
-                            : null;
+                            : "";
                         })
                 ])
                 ->size(Size::Small)
