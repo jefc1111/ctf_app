@@ -12,6 +12,6 @@
             <p>Please refresh the page when the event has started.</p>
         @endif
     @else
-        No active event. You must claim a valid Ticket Purchase and be part of a Team to be able to participate.
+        You must claim a valid Ticket Purchase and be part of a Team to be able to participate.
     @endif
 </x-filament-panels::page>
