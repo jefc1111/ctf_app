@@ -10,9 +10,9 @@ use Illuminate\Support\HtmlString;
 
 class EditTeamAction extends Action
 {
-    protected Team $team;
+    protected ?Team $team;
 
-    public function team(Team $team): static
+    public function team(?Team $team): static
     {
         $this->team = $team;
 
