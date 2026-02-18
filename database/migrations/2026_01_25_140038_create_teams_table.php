@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('join_code')->nullable();
-            $table->foreignId('captain_id')->unique()->constrained('users');
+            $table->foreignId('captain_id')->unique()->nullable()->constrained('users');
             $table->foreignId('coach_id')->nullable()->constrained('users');
             $table->foreignId('event_id')->nullable()->constrained('events');
             $table->timestamps();
