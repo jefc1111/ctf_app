@@ -83,6 +83,8 @@ class TicketPurchasesTable
                             if (auth()->user()->team) {
                                 return "You can only be in one team at a time";
                             }
+
+                            return null;
                         }),
                     EditTeamAction::make()->team(auth()->user()->team)
                         ->visible(fn(TicketPurchase $tp): bool => auth()->user()->isCaptain()),
