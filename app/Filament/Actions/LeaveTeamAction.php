@@ -18,44 +18,29 @@ class LeaveTeamAction extends Action
     {
         parent::setUp();
 
+        $user = auth()->user();
+
         $this
             ->label('Leave Team')
-            ->icon('heroicon-o-arrow-right-start-on-rectangle');
-            
-            // ->requiresConfirmation()
-            // ->modalHeading('Release Ticket Claim')
-            // ->modalDescription('Are you sure you want to release your claim on this ticket? You will be able to claim another ticket for this event afterwards.')
-            // ->modalSubmitActionLabel('Yes, Release Claim')
-            // ->visible(fn (TicketPurchase $record): bool => 
-            //     $record->claimed && 
-            //     $record->claimed_by_user_id === Auth::id()
-            // )
-            // ->action(function (TicketPurchase $record): void {
-            //     $user = Auth::user();
+            ->icon('heroicon-o-arrow-right-on-rectangle')
+            ->color('danger')
+            ->visible(fn (TicketPurchase $record): bool =>
+                $user->inTeamForTicketPurchase($record) &&
+                !$user->isCaptain()
+            )
+            ->requiresConfirmation()
+            ->modalHeading('Leave Team')
+            ->modalDescription('Are you sure you want to leave your team? You will need to join or create a new team to participate in the event.')
+            ->modalSubmitActionLabel('Leave Team')
+            ->action(function (TicketPurchase $record) use ($user): void {
+                $user->team_id = null;
                 
-            //     // Double-check the user owns this claim
-            //     if ($record->claimed_by_user_id !== $user->id) {
-            //         Notification::make()
-            //             ->danger()
-            //             ->title('Unauthorized')
-            //             ->body('You can only release your own ticket claims.')
-            //             ->send();
-                    
-            //         return;
-            //     }
-
-            //     // Release the claim
-            //     $record->update([
-            //         'claimed' => false,
-            //         'claimed_by_user_id' => null,
-            //         'claimed_at' => null,
-            //     ]);
-
-            //     Notification::make()
-            //         ->success()
-            //         ->title('Claim Released')
-            //         ->body('You have successfully released your claim on this ticket.')
-            //         ->send();
-            // });
+                $user->save();
+                
+                Notification::make()
+                    ->title('You have left the team')
+                    ->success()
+                    ->send();
+            });
     }
 }

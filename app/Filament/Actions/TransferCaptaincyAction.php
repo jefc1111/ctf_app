@@ -21,7 +21,7 @@ class TransferCaptaincyAction extends Action
 
         $user = auth()->user();
         $team = $user->team;
-        $isSoleMemember = $team->members->count() === 1;
+        $isSoleMemember = $team?->members?->count() === 1;
 
         $this
             ->label($isSoleMemember ? 'Surrender Captaincy' : 'Transfer Captaincy')

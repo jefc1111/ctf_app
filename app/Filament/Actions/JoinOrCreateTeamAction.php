@@ -8,11 +8,9 @@ use App\Models\TicketPurchase;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Placeholder;
-// use Filament\Forms\Get;
 use Filament\Notifications\Notification;
 use Filament\Actions\Action;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Str;
 use Filament\Schemas\Components\Utilities\Get;
 
 class JoinOrCreateTeamAction extends Action
