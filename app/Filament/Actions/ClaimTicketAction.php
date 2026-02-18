@@ -21,6 +21,7 @@ class ClaimTicketAction extends Action
 
         $this
             ->label('Claim a ticket using a ticket order confirmation ID')
+            ->color('info')
             ->icon('heroicon-o-ticket')
             ->modal()
             ->form([
