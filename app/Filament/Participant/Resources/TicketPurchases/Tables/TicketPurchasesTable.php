@@ -9,8 +9,10 @@ use App\Filament\Actions\ReleaseTicketClaimAction;
 use App\Filament\Actions\JoinOrCreateTeamAction;
 use App\Filament\Actions\TransferCaptaincyAction;
 use App\Filament\Actions\LeaveTeamAction;
+use App\Filament\Actions\EditTeamAction;
 use Filament\Actions\ActionGroup;
 use Filament\Support\Enums\Size;
+use Filament\Support\Enums\Width;
 
 class TicketPurchasesTable
 {
@@ -53,7 +55,7 @@ class TicketPurchasesTable
 
                         return 'No Team';
                     })
-                    ->badge()
+                    // ->badge()
                     ->color(function (TicketPurchase $ticketPurchase): string {
                         $user = auth()->user();
 
@@ -72,7 +74,9 @@ class TicketPurchasesTable
                 ActionGroup::make([
                     // Show if ticket purchase is for current user, and user not already in a team for the ticket purchase's event
                     JoinOrCreateTeamAction::make()
-                        ->disabled(fn(TicketPurchase $tp): bool => auth()->user()->inTeamForTicketPurchase($tp)),                    
+                        ->disabled(fn(TicketPurchase $tp): bool => auth()->user()->inTeamForTicketPurchase($tp)),
+                    EditTeamAction::make()->team(auth()->user()->team)
+                        ->visible(fn(TicketPurchase $tp): bool => auth()->user()->isCaptain()),                  
                     // Show if user is captain of a team for this event
                     TransferCaptaincyAction::make()
                         ->disabled(fn(TicketPurchase $tp): bool => ! auth()->user()->isCaptain()),
@@ -94,6 +98,7 @@ class TicketPurchasesTable
                         })
                 ])
                 ->size(Size::Small)
+                ->dropdownWidth(Width::ExtraSmall)
                 ->label('Team Actions')
                 ->button()
             ])
