@@ -37,6 +37,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 minutes: target.getMinutes(),
                 seconds: target.getSeconds(),
                 countUp: false,
+                inline: el.dataset.inline,
+                inlineSeparator: ', ',
+                inlineClass: 'simply-countdown-inline',
                 onEnd: init, // handles pending -> in-progress transition too
             });
         };

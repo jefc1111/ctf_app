@@ -43,6 +43,7 @@ class ActiveEventPage extends Page
         return view('components.event.countdown', [
             'event' => $this->event,
             'variant' => 'default',
+            'id' => 'active-event-page-countdown',
         ]);
     }
     
