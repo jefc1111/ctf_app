@@ -63,6 +63,9 @@ class TransferCaptaincyAction extends Action
                     ->success()
                     ->send();
             })
+            ->after(function () {
+                $this->getLivewire()->dispatch('refreshTable');
+            })
             ->modalHeading('Transfer Captaincy')
             ->modalDescription($isSoleMemember ? 'You are the only team member.' : 'Choose a team member to become the new captain.')
             ->modalSubmitActionLabel($isSoleMemember ? 'Surrender Captaincy' : 'Transfer Captaincy');

@@ -26,7 +26,7 @@ class JoinOrCreateTeamAction extends Action
 
         $this
             ->label('Join / Create Team')
-            ->icon('heroicon-o-user-group')            
+            ->icon('heroicon-o-user-group')
             ->modal()
             ->modalHeading('Join or Create a Team')
             ->modalWidth('lg')
@@ -46,14 +46,14 @@ class JoinOrCreateTeamAction extends Action
                         ->label('Team Name')
                         ->required()
                         ->maxLength(255)
-                        ->visible(fn (Get $get) => $get('action_type') === 'create')
+                        ->visible(fn(Get $get) => $get('action_type') === 'create')
                         ->helperText('You will become the team captain'),
 
                     TextInput::make('join_code')
                         ->label('Join Code')
                         ->required()
                         ->maxLength(255)
-                        ->visible(fn (Get $get) => $get('action_type') === 'join')
+                        ->visible(fn(Get $get) => $get('action_type') === 'join')
                         ->helperText('Enter the join code provided by your team captain'),
 
                     Placeholder::make('event_info')
@@ -72,7 +72,7 @@ class JoinOrCreateTeamAction extends Action
                         ->title('Already in Team')
                         ->body('You are already part of a team for this event.')
                         ->send();
-                    
+
                     $action->halt();
                     return;
                 }
@@ -82,16 +82,18 @@ class JoinOrCreateTeamAction extends Action
                 } else {
                     $this->joinTeam($user, $eventId, $data['join_code'], $action);
                 }
+            })
+            ->after(function () {
+                $this->getLivewire()->dispatch('refreshTable');
             });
     }
 
     protected function createTeam(
-        User $user, 
+        User $user,
         int $eventId,
-        string $teamName, 
+        string $teamName,
         Action $action
-    ): void
-    {
+    ): void {
         // Check if user is already a captain of another team
         if ($user->captainedTeam) {
             Notification::make()
@@ -99,7 +101,7 @@ class JoinOrCreateTeamAction extends Action
                 ->title('Already a Captain')
                 ->body('You are already the captain of another team. Please leave that team first.')
                 ->send();
-            
+
             $action->halt();
             return;
         }
@@ -119,17 +121,16 @@ class JoinOrCreateTeamAction extends Action
             ->title('Team Created')
             ->body("Team '{$teamName}' created successfully! Share your join code: {$team->join_code}")
             ->send();
-        
+
         $action->success();
     }
 
     protected function joinTeam(
-        User $user, 
-        int $eventId, 
-        string $joinCode, 
+        User $user,
+        int $eventId,
+        string $joinCode,
         Action $action
-    ): void
-    {
+    ): void {
         // Find team by join code
         $team = Team::where('join_code', $joinCode)
             ->where('event_id', $eventId)
@@ -142,7 +143,7 @@ class JoinOrCreateTeamAction extends Action
                 ->title('Invalid Join Code')
                 ->body('No team found with this join code for this event.')
                 ->send();
-            
+
             $action->halt();
             return;
         }
@@ -154,7 +155,7 @@ class JoinOrCreateTeamAction extends Action
                 ->title('Team Full')
                 ->body('This team already has 4 members and cannot accept more players.')
                 ->send();
-            
+
             $action->halt();
             return;
         }
@@ -167,7 +168,7 @@ class JoinOrCreateTeamAction extends Action
             ->title('Joined Team')
             ->body("You have successfully joined team '{$team->name}'!")
             ->send();
-        
+
         $action->success();
     }
 }

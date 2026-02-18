@@ -55,6 +55,9 @@ class ReleaseTicketClaimAction extends Action
                     ->title('Claim Released')
                     ->body('You have successfully released your claim on this ticket.')
                     ->send();
+            })
+            ->after(function () {
+                $this->getLivewire()->dispatch('refreshTable');
             });
     }
 }
