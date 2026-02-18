@@ -111,9 +111,9 @@ class User extends Authenticatable implements Auditable//, MustVerifyEmail
 
     public function activeEvent(): ?Event
     {
-        return $this->ticketPurchases->map(
-            fn($tp) => $tp->event
-        )
+        return $this->ticketPurchases
+        ->filter(fn($tp) => $tp->event_id === $this->team?->event_id)
+        ->map(fn($tp) => $tp->event)
         ->sortBy('start_time')
         ->last();
     }
