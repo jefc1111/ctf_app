@@ -13,6 +13,7 @@ use Filament\Schemas\Components\Grid;
 use BackedEnum;
 use Filament\Support\Icons\Heroicon;
 use App\Filament\Actions\CreateSubmissionAction;
+use Illuminate\Contracts\View\View;
 
 class ActiveEventPage extends Page
 {
@@ -38,13 +39,15 @@ class ActiveEventPage extends Page
     //     return $this->event?->name;
     // }
 
-    public function getHeader(): ?\Illuminate\Contracts\View\View
+    public function getHeader(): ?View
     {
-        return view('components.event.countdown', [
+        return $this->event 
+        ? view('components.event.countdown', [
             'event' => $this->event,
             'variant' => 'default',
-            'id' => 'active-event-page-countdown',
-        ]);
+            'location' => 'participant-page'
+        ])
+        : view('components.event.no-active-event');
     }
     
     public function eventInfolist(Schema $schema): Schema
