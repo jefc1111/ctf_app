@@ -24,7 +24,7 @@ class EventFactory extends Factory
             : $now->copy()->hour($now->hour + 2)->minute(0)->second(0);
 
         return [
-            'name' => 'TL CTF '.fake()->words(2, true),
+            'name' => 'CTF '.fake()->words(2, true),
             'start_time' => $start,
             'end_time' => $start->addHours(4)
         ];
