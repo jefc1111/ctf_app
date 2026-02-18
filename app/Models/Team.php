@@ -33,7 +33,7 @@ class Team extends Model implements Auditable
     {
         static::saving(function ($team) {
             // Ensure captain is a team member
-            if ($team->captain->team_id !== $team->id) {
+            if ($team->captain && $team->captain->team_id !== $team->id) {
                 throw new \Exception('Captain must be a team member');
             }
             
