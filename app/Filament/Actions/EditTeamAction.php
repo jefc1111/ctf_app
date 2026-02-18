@@ -62,6 +62,9 @@ class EditTeamAction extends Action
             })
             ->action(function (array $data): void {
                 $this->team->update(['name' => $data['team_name']]);
+            })
+            ->after(function () {
+                $this->getLivewire()->dispatch('refreshTable');
             });
     }
 }

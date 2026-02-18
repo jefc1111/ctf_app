@@ -41,6 +41,9 @@ class LeaveTeamAction extends Action
                     ->title('You have left the team')
                     ->success()
                     ->send();
+            })
+            ->after(function () {
+                $this->getLivewire()->dispatch('refreshTable');
             });
     }
 }

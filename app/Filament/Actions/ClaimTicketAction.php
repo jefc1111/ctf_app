@@ -6,7 +6,6 @@ use App\Models\TicketPurchase;
 use Filament\Actions\Action;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
-use Illuminate\Support\Facades\Auth;
 
 class ClaimTicketAction extends Action
 {
