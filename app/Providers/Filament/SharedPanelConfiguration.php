@@ -17,6 +17,8 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Support\Enums\Width;
 use App\Http\Middleware\Filament\SetUserMenuItems;
 use App\Filament\AvatarProviders\JetstreamProfilePhotoAvatarProvider;
+use Filament\Support\Assets\Js;
+use Vite;
 
 class SharedPanelConfiguration
 {    public static function applyDefaults(
@@ -36,6 +38,9 @@ class SharedPanelConfiguration
             ->maxContentWidth(Width::ScreenTwoExtraLarge)
             ->colors([
                 'primary' => Color::Amber,
+            ])
+            ->assets([
+                Js::make('countdown', Vite::asset('resources/js/countdown.js')),
             ])
             ->middleware([
                 EncryptCookies::class,

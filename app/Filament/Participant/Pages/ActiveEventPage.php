@@ -33,11 +33,19 @@ class ActiveEventPage extends Page
         $this->event = auth()->user()->activeEvent();
     }
 
-    public function getHeading(): ?string
-    {
-        return $this->event?->name;
-    }
+    // public function getHeading(): ?string
+    // {
+    //     return $this->event?->name;
+    // }
 
+    public function getHeader(): ?\Illuminate\Contracts\View\View
+    {
+        return view('components.event.countdown', [
+            'event' => $this->event,
+            'variant' => 'default',
+        ]);
+    }
+    
     public function eventInfolist(Schema $schema): Schema
     {
         $labelSuffix = $this->event->isInProgress() ? "" : " (TBC)";
