@@ -1,15 +1,15 @@
-@props(['event', 'variant' => 'default'])
-@php $id = 'countdown-' . $event->id; @endphp
-
-<div @class([
+@props(['event', 'location', 'variant' => 'default'])
+@php $id = "countdown-$event->id-$location" @endphp
+<div wire:ignore @class([
     'simply-countdown-inline' => $variant === 'compact'
 ])>
-    <span
-        wire:ignore 
+    <span        
         id="{{ $id }}-label"
+        @class([
+            'simply-countdown-cyber' => $variant === 'default',
+        ])
     ></span>
     <div
-        wire:ignore
         data-countdown
         data-start-time="{{ $event->start_time->toIso8601String() }}"
         data-end-time="{{ $event->end_time->toIso8601String() }}"
@@ -17,7 +17,7 @@
         data-inline="{{ $variant === 'compact' }}"
         @class([
             'simply-countdown-cyber' => $variant === 'default',
-            'simply-countdown-inline' => $variant === 'compact'
+            'simply-countdown-inline' => $variant === 'compact',
         ])
     ></div>
 </div>

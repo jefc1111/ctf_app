@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const target = status === 'pending' ? startTime : endTime;
-
+console.log(el.dataset)
             simplyCountdown(el, {
                 year: target.getFullYear(),
                 month: target.getMonth() + 1,
@@ -37,8 +37,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 minutes: target.getMinutes(),
                 seconds: target.getSeconds(),
                 countUp: false,
+                zeroPad: el.dataset.inline,
+                plural: ! el.dataset.inline,
                 inline: el.dataset.inline,
-                inlineSeparator: ', ',
+                inlineSeparator: ' ',
                 inlineClass: 'simply-countdown-inline',
                 onEnd: init, // handles pending -> in-progress transition too
             });
