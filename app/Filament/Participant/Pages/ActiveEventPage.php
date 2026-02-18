@@ -14,15 +14,15 @@ use BackedEnum;
 use Filament\Support\Icons\Heroicon;
 use App\Filament\Actions\CreateSubmissionAction;
 
-class EventCasesPage extends Page
+class ActiveEventPage extends Page
 {
-    protected string $view = 'filament.participant.pages.event-cases';
+    protected string $view = 'filament.participant.pages.active-event';
 
-    protected static ?string $navigationLabel = 'Live Event View';
+    protected static ?string $navigationLabel = 'Active Event';
 
     protected ?string $heading = 'Custom Page Heading';
 
-    protected static ?string $slug = 'live-event';
+    protected static ?string $slug = 'active-event';
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::Flag;
 

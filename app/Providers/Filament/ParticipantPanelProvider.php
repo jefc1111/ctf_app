@@ -4,7 +4,6 @@ namespace App\Providers\Filament;
 
 use Filament\Panel;
 use Filament\PanelProvider;
-use App\Filament\Participant\Pages\EventCasesPage;
 
 class ParticipantPanelProvider extends PanelProvider
 {
