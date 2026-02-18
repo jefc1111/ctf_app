@@ -24,6 +24,7 @@ class TicketPurchaseForm
                 TextInput::make('purchaser_email')
                     ->required(),
                 TextInput::make('ticket_id')
+                    ->copyable()
                     ->required(),
                 TextInput::make('discord_user'),
 

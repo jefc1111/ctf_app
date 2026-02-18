@@ -74,9 +74,15 @@ class TicketPurchasesTable
                 ActionGroup::make([
                     // Show if ticket purchase is for current user, and user not already in a team for the ticket purchase's event
                     JoinOrCreateTeamAction::make()
-                        ->disabled(fn(TicketPurchase $tp): bool => auth()->user()->inTeamForTicketPurchase($tp))
-                        ->tooltip(function (TicketPurchase $tp): string {
-                            return auth()->user()->inTeamForTicketPurchase($tp) ? "You are already in a team" : "";
+                        ->disabled(fn(TicketPurchase $tp): bool => !! auth()->user()->team)
+                        ->tooltip(function (TicketPurchase $tp): ?string {
+                            if (auth()->user()->inTeamForTicketPurchase($tp)) {
+                                return "You are already in a team for the event";
+                            }
+
+                            if (auth()->user()->team) {
+                                return "You can only be in one team at a time";
+                            }
                         }),
                     EditTeamAction::make()->team(auth()->user()->team)
                         ->visible(fn(TicketPurchase $tp): bool => auth()->user()->isCaptain()),
