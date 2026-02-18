@@ -111,11 +111,13 @@ class User extends Authenticatable implements Auditable//, MustVerifyEmail
 
     public function activeEvent(): ?Event
     {
+        // For an admin user we may just want to send whataver the next event is  
+        
         return $this->ticketPurchases
-        ->filter(fn($tp) => $tp->event_id === $this->team?->event_id)
-        ->map(fn($tp) => $tp->event)
-        ->sortBy('start_time')
-        ->last();
+            ->filter(fn($tp) => $tp->event_id === $this->team?->event_id)
+            ->map(fn($tp) => $tp->event)
+            ->sortBy('start_time')
+            ->last();
     }
 
     public function isCaptain(): bool
