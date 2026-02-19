@@ -35,4 +35,18 @@ class CaseModel extends Model implements Auditable
     {
         return $this->hasMany(Submission::class, 'case_id');
     }
+
+    public function caseSubmissionText(): string
+    {
+        $submission_count = $this->submissions->count();
+
+        $points = $this->submissions->sum(fn($s) => $s->category->points);
+
+        return $submission_count === 0 ? 'None' : "$submission_count ($points points)";
+    }
+
+    public function caseSubmissionColor(): string
+    {
+        return $this->submissions->isEmpty() ? 'danger' : 'warning';
+    }
 }

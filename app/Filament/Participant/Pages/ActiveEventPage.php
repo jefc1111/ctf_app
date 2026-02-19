@@ -96,19 +96,9 @@ class ActiveEventPage extends Page
                 ->inlineLabel()
                 ->schema([
                     TextEntry::make('total_submissions')
-                        ->default(function(CaseModel $case) {
-                            $submission_count = $case->submissions->count();
-
-                            $points = $case->submissions->sum(fn($s) => $s->category->points);
-
-                            return $submission_count === 0 ? 'None' : "$submission_count ($points points)";
-                        })                        
-                        ->badge()
-                        ->color(function(CaseModel $case) {
-                            $submission_count = $case->submissions->count();
-
-                            return $submission_count === 0 ? 'danger' : 'warning';
-                        }),
+                        ->default(fn(CaseModel $case) => $case->caseSubmissionText())                       
+                        ->color(fn(CaseModel $case) => $case->caseSubmissionColor())
+                        ->badge(),
                     TextEntry::make('team_submissions')
                         ->default(fn() => rand(5, 10).' ('.(rand(15, 50)*10).' points)') // @TODO make this real
                         ->badge(),                                    
