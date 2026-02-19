@@ -20,14 +20,17 @@
 @props([
     'event', 
     'location', 
-    'variant' => 'default',
-    'preamble' => ''
+    'variant' => 'default'
 ])
 @php $id = "countdown-$event->id-$location" @endphp
 <div wire:ignore @class([
     'countdown-compact' => $variant === 'compact'
 ])>
-    <span>{{ $preamble }}</span>
+    @if ($variant === 'compact')
+        <span>
+            <a href=""#>{{ $event->name }}</a>
+        </span>
+    @endif
     <span        
         id="{{ $id }}-label"
         @class([
