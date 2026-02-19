@@ -28,7 +28,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const target = status === 'pending' ? startTime : endTime;
-console.log(el.dataset)
+
             simplyCountdown(el, {
                 year: target.getFullYear(),
                 month: target.getMonth() + 1,
