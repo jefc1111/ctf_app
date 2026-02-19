@@ -1,8 +1,33 @@
-@props(['event', 'location', 'variant' => 'default'])
+<style>
+    .countdown-compact {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        text-transform: lowercase;        
+        font-family: monospace;
+    }
+    
+    .countdown-compact .simply-countdown-inline {
+        font-family: monospace;
+        letter-spacing: 0.05em;
+    }
+    
+    html:is(.dark) .countdown-compact {
+        color: #00FF41;
+    }
+</style>
+
+@props([
+    'event', 
+    'location', 
+    'variant' => 'default',
+    'preamble' => ''
+])
 @php $id = "countdown-$event->id-$location" @endphp
 <div wire:ignore @class([
-    'simply-countdown-inline' => $variant === 'compact'
+    'countdown-compact' => $variant === 'compact'
 ])>
+    <span>{{ $preamble }}</span>
     <span        
         id="{{ $id }}-label"
         @class([

@@ -12,11 +12,12 @@ use Illuminate\Support\Facades\View;
 FilamentView::registerRenderHook(
     PanelsRenderHook::GLOBAL_SEARCH_BEFORE, // or TOPBAR_START, TOPBAR_END, etc.
     fn () => auth()->user()?->activeEvent()->isPending() || auth()->user()?->activeEvent()->isInProgress()
-    ? auth()->user()->activeEvent()->name.View::make('components.event.countdown', [
+    ? View::make('components.event.countdown', [
         'event' => auth()->user()->activeEvent(),
         'variant' => 'compact',
         'id' => 'header-countdown',
-        'location' => 'header'
+        'location' => 'header',
+        'preamble' => auth()->user()->activeEvent()->name
     ])
     : null
 );
