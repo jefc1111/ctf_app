@@ -18,6 +18,7 @@ use Filament\Support\Enums\Width;
 use App\Http\Middleware\Filament\SetUserMenuItems;
 use App\Filament\AvatarProviders\JetstreamProfilePhotoAvatarProvider;
 use Filament\Support\Assets\Js;
+use Filament\Support\Assets\Css;
 use Vite;
 
 class SharedPanelConfiguration
@@ -41,6 +42,8 @@ class SharedPanelConfiguration
             ])
             ->assets([
                 Js::make('countdown', Vite::asset('resources/js/countdown.js')),
+                Js::make('countdown-src', Vite::asset('resources/js/simplyCountdown.umd.js')),
+                Css::make('countdown-src', Vite::asset('resources/css/simplyCountdown-cyber.min.css')),
             ])
             ->middleware([
                 EncryptCookies::class,

@@ -1,9 +1,4 @@
-<x-filament-panels::page>    
-    @assets
-        <link rel="stylesheet" href="{{ asset('css/simplyCountdown-cyber.min.css') }}">
-        <script src="{{ asset('js/simplyCountdown.umd.js') }}"></script>
-    @endassets
-
+<x-filament-panels::page>
     @if ($this->event)
         @if ($this->event->isInProgress())
             {{ $this->eventInfolist }}
