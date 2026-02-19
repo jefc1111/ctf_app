@@ -92,12 +92,23 @@ class ActiveEventPage extends Page
 
         $casesSchema = [
             $missingPersonDetailsSection,
-            Section::make('Flag submissions (NOTE: placeholder stats only')
+            Section::make('Flag submissions')
                 ->inlineLabel()
                 ->schema([
                     TextEntry::make('total_submissions')
-                        ->default(fn() => rand(10, 50).' ('.(rand(80, 500)*10).' points)') // @TODO make this real
-                        ->badge(),
+                        ->default(function(CaseModel $case) {
+                            $submission_count = $case->submissions->count();
+
+                            $points = $case->submissions->sum(fn($s) => $s->category->points);
+
+                            return $submission_count === 0 ? 'None' : "$submission_count ($points points)";
+                        })                        
+                        ->badge()
+                        ->color(function(CaseModel $case) {
+                            $submission_count = $case->submissions->count();
+
+                            return $submission_count === 0 ? 'danger' : 'warning';
+                        }),
                     TextEntry::make('team_submissions')
                         ->default(fn() => rand(5, 10).' ('.(rand(15, 50)*10).' points)') // @TODO make this real
                         ->badge(),                                    
