@@ -8,7 +8,6 @@ export default defineConfig({
                 'resources/css/app.css', 
                 'resources/css/simplyCountdown-cyber.min.css',
                 'resources/js/app.js',
-                'resources/js/simplyCountdown.umd.js',
                 'resources/js/countdown.js'
             ],
             refresh: true,
