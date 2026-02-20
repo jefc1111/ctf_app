@@ -90,24 +90,17 @@ class ActiveEventPage extends Page
                 ]);
         }
 
+        $flagSubmissionsSection = array_map(fn($subset) => TextEntry::make($subset)
+            ->default(fn(CaseModel $case) => $case->caseSubmissionDisplayText($subset))                       
+            ->color(fn(CaseModel $case) => $case->caseSubmissionDisplayColor($subset))
+            ->badge(), ['total', 'team', 'user']
+        );
+
         $casesSchema = [
             $missingPersonDetailsSection,
             Section::make('Flag submissions')
                 ->inlineLabel()
-                ->schema([
-                    TextEntry::make('total_submissions')
-                        ->default(fn(CaseModel $case) => $case->caseSubmissionDisplayText('total'))                       
-                        ->color(fn(CaseModel $case) => $case->caseSubmissionDisplayColor('total'))
-                        ->badge(),
-                    TextEntry::make('team_submissions')
-                        ->default(fn(CaseModel $case) => $case->caseSubmissionDisplayText('team'))                   
-                        ->color(fn(CaseModel $case) => $case->caseSubmissionDisplayColor('team'))
-                        ->badge(),                                    
-                    TextEntry::make('your_submissions')
-                        ->default(fn(CaseModel $case) => $case->caseSubmissionDisplayText('user'))
-                        ->color(fn(CaseModel $case) => $case->caseSubmissionDisplayColor('user'))
-                        ->badge()                                
-                ]),
+                ->schema($flagSubmissionsSection),
             $caseDetailsSection
         ];
 
