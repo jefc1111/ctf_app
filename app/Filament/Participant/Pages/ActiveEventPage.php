@@ -96,14 +96,16 @@ class ActiveEventPage extends Page
                 ->inlineLabel()
                 ->schema([
                     TextEntry::make('total_submissions')
-                        ->default(fn(CaseModel $case) => $case->caseSubmissionText())                       
-                        ->color(fn(CaseModel $case) => $case->caseSubmissionColor())
+                        ->default(fn(CaseModel $case) => $case->caseSubmissionDisplayText('total'))                       
+                        ->color(fn(CaseModel $case) => $case->caseSubmissionDisplayColor('total'))
                         ->badge(),
                     TextEntry::make('team_submissions')
-                        ->default(fn() => rand(5, 10).' ('.(rand(15, 50)*10).' points)') // @TODO make this real
+                        ->default(fn(CaseModel $case) => $case->caseSubmissionDisplayText('team'))                   
+                        ->color(fn(CaseModel $case) => $case->caseSubmissionDisplayColor('team'))
                         ->badge(),                                    
                     TextEntry::make('your_submissions')
-                        ->default(fn() => rand(1, 5).' ('.(rand(0, 15)*10).' points)') // @TODO make this real
+                        ->default(fn(CaseModel $case) => $case->caseSubmissionDisplayText('user'))
+                        ->color(fn(CaseModel $case) => $case->caseSubmissionDisplayColor('user'))
                         ->badge()                                
                 ]),
             $caseDetailsSection
