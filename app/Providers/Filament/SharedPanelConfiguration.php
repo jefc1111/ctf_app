@@ -42,7 +42,7 @@ class SharedPanelConfiguration
             ])
             ->assets([
                 Js::make('countdown', Vite::asset('resources/js/countdown.js')),
-                Js::make('countdown-src', Vite::asset('resources/js/simplyCountdown.umd.js')),
+                Js::make('countdown-src', asset('js/simplyCountdown.umd.js')),
                 Css::make('countdown-src', Vite::asset('resources/css/simplyCountdown-cyber.min.css')),
             ])
             ->middleware([
