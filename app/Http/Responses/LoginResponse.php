@@ -21,7 +21,7 @@ class LoginResponse implements LoginResponseContract
         }
         
         if ($user->hasRole('Participant')) {
-            return redirect()->intended('/participant/live-event');
+            return redirect()->intended('/participant/active-event');
         }
         
         // Default fallback
