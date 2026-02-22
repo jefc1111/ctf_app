@@ -16,7 +16,7 @@ Route::get('/', function () {
         }
         
         if ($user->hasRole('Participant')) {
-            return redirect()->intended('/participant/live-event');
+            return redirect()->intended('/participant/active-event');
         }
                 
         Auth::logout();
