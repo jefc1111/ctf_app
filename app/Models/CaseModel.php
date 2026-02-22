@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
+use App\Enums\SubmissionSubset;
+use Illuminate\Support\Collection;
 
 // `Case` is reserved in PHP
 class CaseModel extends Model implements Auditable
@@ -36,17 +38,41 @@ class CaseModel extends Model implements Auditable
         return $this->hasMany(Submission::class, 'case_id');
     }
 
-    public function caseSubmissionDisplayText(): string
+    public function teamSubmissions(): HasMany
     {
-        $submission_count = $this->submissions->count();
-
-        $points = $this->submissions->sum(fn($s) => $s->category->points);
-
-        return $submission_count === 0 ? 'None' : "$submission_count ($points points)";
+        $team = auth()->user()->team;
+        
+        return $this->hasMany(Submission::class, 'case_id')
+            ->where('team_id', $team->id);
     }
 
-    public function caseSubmissionDisplayColor(): string
+    public function userSubmissions(): HasMany
     {
-        return $this->submissions->isEmpty() ? 'danger' : 'warning';
+        return $this->hasMany(Submission::class, 'case_id')
+            ->where('owner_id', auth()->id());
+    }
+
+    public function caseSubmissionDisplayText(SubmissionSubset $subset): string
+    {
+        $submissions = $this->filteredSubmissions($subset);
+
+        $count  = $submissions->count();
+        $points = $submissions->sum(fn($s) => $s->category->points);
+
+        return $count === 0 ? 'None' : "$count ($points points)";
+    }
+
+    public function caseSubmissionDisplayColor(SubmissionSubset $subset): string
+    {
+        return $this->filteredSubmissions($subset)->isEmpty() ? 'danger' : 'warning';
+    }
+
+    private function filteredSubmissions(SubmissionSubset $subset): Collection
+    {
+        return match($subset) {
+            SubmissionSubset::Total => $this->submissions,
+            SubmissionSubset::Team  => $this->teamSubmissions,
+            SubmissionSubset::User  => $this->userSubmissions,
+        };
     }
 }

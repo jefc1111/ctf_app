@@ -14,6 +14,7 @@ use BackedEnum;
 use Filament\Support\Icons\Heroicon;
 use App\Filament\Actions\CreateSubmissionAction;
 use Illuminate\Contracts\View\View;
+use App\Enums\SubmissionSubset;
 
 class ActiveEventPage extends Page
 {
@@ -90,10 +91,15 @@ class ActiveEventPage extends Page
                 ]);
         }
 
-        $flagSubmissionsSection = array_map(fn($subset) => TextEntry::make($subset)
-            ->default(fn(CaseModel $case) => $case->caseSubmissionDisplayText($subset))                       
-            ->color(fn(CaseModel $case) => $case->caseSubmissionDisplayColor($subset))
-            ->badge(), ['total', 'team', 'user']
+        // This defines the content for the 'Flag submissions' sesction where there is a summary 
+        // for total, team and current user sumbmissions
+        $flagSubmissionsSection = array_map(
+            fn(SubmissionSubset $subset) => TextEntry::make($subset->value)
+                ->label($subset->label())
+                ->default(fn(CaseModel $case) => $case->caseSubmissionDisplayText($subset))
+                ->color(fn(CaseModel $case) => $case->caseSubmissionDisplayColor($subset))
+                ->badge(),
+            SubmissionSubset::cases()
         );
 
         $casesSchema = [
