@@ -3,11 +3,11 @@
 namespace App\Enums;
 
 enum SubmissionDecisionStatus: string {
-    case PENDING = 'Pending'; 
-    case UNDER_REVIEW = 'Under review'; 
-    case AWAITING_PEER_REVIEW = 'Awaiting peer review';
-    case APPROVED = 'Approved';
-    case DECLINED = 'Declined';
+    case Pending = 'Pending'; 
+    case UnderReview = 'Under review'; 
+    case AwaitingPeerReview = 'Awaiting peer review';
+    case Approved = 'Approved';
+    case Declined = 'Declined';
 
     public static function names(): array {
         return array_map(fn($case) => $case->name, self::cases());
