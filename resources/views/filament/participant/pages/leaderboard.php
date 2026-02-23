@@ -1,3 +1,3 @@
 <x-filament-panels::page>
-    LEADERBOARD
+    LEADERBOARD (WIP)
 </x-filament-panels::page>

@@ -35,6 +35,13 @@ class LeaderboardPage extends Page
         $this->event = auth()->user()->activeEvent();
     }
 
+    public static function shouldRegisterNavigation(): bool
+    {
+        $event = auth()->user()->activeEvent();
+
+        return !! $event?->isInProgress();
+    }
+
     // public function getHeading(): ?string
     // {
     //     return $this->event?->name;
@@ -75,10 +82,4 @@ class LeaderboardPage extends Page
     //     : 'warning';
     // }
 
-    public static function getNavigationUrl(): string
-    {
-        $event = auth()->user()->activeEvent();
-
-        return $event?->isInProgress() || $event?->isEnded() ? parent::getNavigationUrl() : '#';    
-    }
 }
