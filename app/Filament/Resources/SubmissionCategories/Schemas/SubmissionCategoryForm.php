@@ -3,6 +3,7 @@
 namespace App\Filament\Resources\SubmissionCategories\Schemas;
 use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\RichEditor;
 
 use Filament\Schemas\Schema;
 
@@ -14,11 +15,13 @@ class SubmissionCategoryForm
             ->components([
                 TextInput::make('name')
                     ->required(),
-                TextInput::make('points')
+                TextInput::make('subtitle')
                     ->required(),
-                Textarea::make('description')
+                TextInput::make('points')
+                    ->numeric()
+                    ->required(),
+                RichEditor::make('description')
                     ->columnSpan(2)
-                    ->rows(5)
             ]);
     }
 }
