@@ -14,7 +14,8 @@ use Filament\Actions\DeleteAction;
 use Filament\Actions\ForceDeleteAction;
 use Filament\Actions\RestoreAction;
 use App\Models\Event;
-use Filament\Tables\Columns\Summarizers\Count;
+use Filament\Tables\Columns\IconColumn;
+use Filament\Support\Icons\Heroicon;
 
 class EventsTable
 {
@@ -56,6 +57,12 @@ class EventsTable
                     ->label('Qty Teams')
                     ->sortable()
                     ->counts('teams'),
+                IconColumn::make('simulate_activity')
+                    ->boolean()
+                    ->trueIcon(Heroicon::Check)
+                    ->falseIcon(Heroicon::MinusCircle)
+                    ->trueColor('success')
+                    ->falseColor('gray'),
             ])
             ->filters([
                 TrashedFilter::make(),
