@@ -22,7 +22,7 @@ return new class extends Migration
             $table->text('explanation')->nullable();
             $table->boolean('draft');
             $table->string('decision_status');
-            $table->text('decision_supporting_evidence')->nullable();
+            $table->text('decision_supporting_evidence')->nullable();            
             $table->timestamps();
             $table->softDeletes();
         });

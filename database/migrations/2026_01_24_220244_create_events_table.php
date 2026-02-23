@@ -17,6 +17,7 @@ return new class extends Migration
             $table->timestamps();
             $table->timestamp('start_time')->nullable();
             $table->timestamp('end_time')->nullable();
+            $table->boolean('simulate_activity')->default(false);
             $table->softDeletes();
         });
     }

@@ -30,7 +30,9 @@ class TestDataSeeder extends Seeder
 
         $teams = $this->createTestTeams($testUsersByRoleCode, $events);
 
-        $this->createTestSubmissions($teams);
+        // We're not going to create test submissions for events which simulation active
+        // because the simulator will create them
+        $this->createTestSubmissions(array_filter($teams, fn($t) => ! $t->event->simulate_activity));
 
         $this->createTestTicketPurchases($events, $testUsersByRoleCode['p']);
     }
@@ -131,7 +133,9 @@ class TestDataSeeder extends Seeder
                 'captain_id' => $participantUserSet->first(),
                 // Let's assign a coach to every other team (we'll re-use coaches)
                 'coach_id' => $k % 2 === 0 ? $testUsersByRoleCode['c'][$k % 3] : null,
-                'event_id' => ! empty($events) ? $events[0]->id : null
+                'event_id' => collect($events)                    
+                    ->map(fn($e) => $e->id)
+                    ->random()
             ]);
             
             // All users in the set (including captain) are team members
@@ -151,21 +155,29 @@ class TestDataSeeder extends Seeder
     {
         $events = [];
 
-        $qtyTestEvents = 5;
+        $qtyTestEvents = 3;
 
         $maxQtyCasesPerEvent = 4;
 
         $this->command->info("Creating $qtyTestEvents test Events and up to $maxQtyCasesPerEvent Cases per Event");
 
         foreach (range(1, $qtyTestEvents) as $i) {
-            $event = Event::factory()->create();
+            // We'll make the first of our batch of test events start now
+            // and we'll set it up for simulated activity to take place
+            $eventParameters = $i === 1 ? [
+                'start_time' => Carbon::now(),
+                'end_time' => Carbon::now()->addHours(4),
+                'simulate_activity' => true
+            ] : [];
+
+            $event = Event::factory()->create($eventParameters);
 
             // Make sure the first event created gets a full set of cases, the others get randomised amounts of cases
             $qtyCasesForThisEvent = $i === 1 ? $maxQtyCasesPerEvent : rand(0, $maxQtyCasesPerEvent);
             
             foreach (range(1, $qtyCasesForThisEvent) as $_i) {
                 CaseModel::factory()->create([
-                    'event_id' => $event->id
+                    'event_id' => $event->id,
                 ]);
             }
 

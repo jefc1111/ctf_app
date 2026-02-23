@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Events\Schemas;
 
 use Filament\Schemas\Schema;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Components\DateTimePicker;
 
 class EventForm
@@ -14,8 +15,10 @@ class EventForm
             ->components([
                 TextInput::make('name')
                     ->required(),
+                Toggle::make('simulate_activity')
+                    ->inline(false),
                 DateTimePicker::make('start_time'),
-                DateTimePicker::make('end_time')
+                DateTimePicker::make('end_time'),                
             ]);
     }
 }

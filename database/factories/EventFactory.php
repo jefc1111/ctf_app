@@ -17,16 +17,17 @@ class EventFactory extends Factory
      */
     public function definition(): array
     {
-        $now = Carbon::now();
+        $yesterday = Carbon::yesterday();
         
-        $start = $now->minute < 30 
-            ? $now->copy()->hour($now->hour + 1)->minute(0)->second(0)
-            : $now->copy()->hour($now->hour + 2)->minute(0)->second(0);
+        $start = $yesterday->minute < 30 
+            ? $yesterday->copy()->hour($yesterday->hour + 1)->minute(0)->second(0)
+            : $yesterday->copy()->hour($yesterday->hour + 2)->minute(0)->second(0);
 
         return [
             'name' => 'CTF '.fake()->words(2, true),
             'start_time' => $start,
-            'end_time' => $start->addHours(4)
+            'end_time' => $start->copy()->addHours(4),
+            'simulate_activity' => false
         ];
     }
 }
