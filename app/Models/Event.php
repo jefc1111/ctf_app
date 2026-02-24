@@ -10,13 +10,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use Carbon\Carbon;
+use Illuminate\Console\Command;
 
 class Event extends Model implements Auditable
 {
     use SoftDeletes;
     use HasFactory;
     use AuditableTrait;
-    
+
     protected $fillable = [
         'name',
         'start_time',
@@ -45,7 +46,7 @@ class Event extends Model implements Auditable
 
     public function cases(): HasMany
     {
-        return $this->hasMany(CaseModel::class);        
+        return $this->hasMany(CaseModel::class);
     }
 
     public function teams(): HasMany
@@ -60,7 +61,7 @@ class Event extends Model implements Auditable
 
     public function isInProgress(): bool
     {
-        return (! $this->isPending()) && (! $this->isEnded());
+        return (!$this->isPending()) && (!$this->isEnded());
     }
 
     public function isEnded(): bool
@@ -92,5 +93,27 @@ class Event extends Model implements Auditable
         }
 
         return 'Event complete';
+    }
+
+    public function progressPercentage(): float
+    {
+        if ($this->isPending()) {
+            return 0.0;
+        }
+
+        if ($this->isEnded()) {
+            return 100.0;
+        }
+
+        $total = $this->end_time->diffInSeconds($this->start_time);
+
+        $elapsed = now()->diffInSeconds($this->start_time);
+
+        return round(($elapsed / $total) * 100, 2);
+    }
+
+    public function durationHours(): int
+    {
+        return $this->start_time->diffInHours($this->end_time);
     }
 }
