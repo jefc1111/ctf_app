@@ -3,11 +3,15 @@
 namespace App\Utility\Simulation;
 
 use Illuminate\Console\Command;
+use App\Jobs\Simulator\SimulateSubmission;
 use App\Models\Event;
+use App\Models\team;
+use App\Models\CaseModel;
+use App\Models\SubmissionCategory;
 
 class SimulationStep
 {
-    private const BASE_RATE_PER_HOUR = 0.5;
+    private const BASE_RATE_PER_HOUR = 1.8;
 
     public function __construct(
         private Event $event,
@@ -22,14 +26,10 @@ class SimulationStep
 
     public function run(): void
     {
-        $count = $this->submissionsThisStep();
-
-        $this->log("Creating {$count} submissions for event: {$this->event->name}");
-
-        $this->distributeSubmissions($count);
+        $this->distributeSubmissions($this->qtySubmissionsThisStep());
     }
 
-    private function submissionsThisStep(): int
+    private function qtySubmissionsThisStep(): int
     {
         $progress = $this->event->progressPercentage() / 100;
 
@@ -42,8 +42,7 @@ class SimulationStep
 
         $this->log("Going to create $result new Submissions (derived from expected: $expected, intensity: $intensity.");
 
-
-        return (int) round($expected * (0.5 + (mt_rand() / mt_getrandmax())));
+        return $result;
     }
 
     private function distributeSubmissions(int $count): void
@@ -57,17 +56,18 @@ class SimulationStep
 
         for ($i = 0; $i < $count; $i++) {
             $team = $this->pickWeighted($teams, fn($t) => $this->teamWeight($t));
+            
             $case = $this->pickWeighted($cases, fn($c) => $this->caseWeight($c, $team));
 
-            $user = $this->pickTeamMember($team);
+            $category = $this->pickWeighted(SubmissionCategory::all(), fn($sc) => $this->categoryWeight($sc));
 
-            // SimulateSubmission::dispatch($user, $team, $case)->delay(rand(0, 59));
+            SimulateSubmission::dispatch($case, $team, $category)->delay(rand(0, 59));
 
-            $this->log("Queued submission by {$user->name} for team {$team->name} on case {$case->name}");
+            $this->log("Queued submission in category '{$category->name}' for team {$team->name} on case {$case->name}");
         }
     }
 
-    private function teamWeight($team): float
+    private function teamWeight(Team $team): float
     {
         srand($team->id);
 
@@ -78,11 +78,18 @@ class SimulationStep
         return $weight;
     }
 
-    private function caseWeight($case, $team): float
+    private function caseWeight(CaseModel $case, Team $team): float
     {
         $attempts = $team->submissions()->where('case_id', $case->id)->count();
 
         return max(0.1, 1.0 - ($attempts * 0.1));
+    }
+
+    private function categoryWeight(SubmissionCategory $category): float
+    {
+        // Multiplying by itself accentuates the distance between categories i.e. 10*10=100 and 5000*5000=25000000. 
+        // Making it negative means higher point categories are lower weighted. 
+        return $category->points * $category->points * -1;
     }
 
     private function pickWeighted($items, callable $weightFn): mixed
@@ -103,10 +110,5 @@ class SimulationStep
         }
 
         return $items->last();
-    }
-
-    private function pickTeamMember($team)
-    {
-        return $team->members->random();
     }
 }
