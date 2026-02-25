@@ -4,6 +4,7 @@ namespace App\Filament\Widgets;
 
 use Filament\Widgets\ChartWidget;
 use App\Models\Team;
+use App\Enums\SubmissionDecisionStatus;
 
 class LeaderboardChart extends ChartWidget
 {
@@ -20,9 +21,11 @@ class LeaderboardChart extends ChartWidget
         $teamScores = Team::with(['submissions.category'])
             ->get()
             ->mapWithKeys(function ($team) {
-                $totalPoints = $team->submissions->sum(function ($submission) {
-                    return $submission->category->points ?? 0;
-                });
+                $totalPoints = $team->submissions
+                    ->where('decision_status', SubmissionDecisionStatus::Approved)
+                    ->sum(function ($submission) {
+                        return $submission->category->points ?? 0;
+                    });
                 
                 return [ $team->name => $totalPoints ];
             })->sortDesc();
