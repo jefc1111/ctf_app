@@ -111,13 +111,26 @@ class User extends Authenticatable implements Auditable//, MustVerifyEmail
 
     public function activeEvent(): ?Event
     {
-        // For an admin user we may just want to send whataver the next event is  
-        
-        return $this->ticketPurchases
+        // For any type of user, if they have ticket purchases, return an event based on that
+        $currentOrNextUpEventByTicketPurchase = $this->ticketPurchases
             ->filter(fn($tp) => $tp->event_id === $this->team?->event_id)
             ->map(fn($tp) => $tp->event)
             ->sortBy('start_time')
             ->last();
+
+        if ($currentOrNextUpEventByTicketPurchase) {
+            return $currentOrNextUpEventByTicketPurchase;
+        }
+
+        // For an admin user we'll send back an event if we can, irrespective of ticket purchases
+        if (auth()->user()->hasRole([ 'Super Admin', 'Admin', 'Event staff' ])) {
+            return Event::all()
+                ->sortBy('end_time')
+                ->filter(fn($e) => $e->isInProgress() || $e->isPending())
+                ->last();
+        } else {
+            return null;
+        }
     }
 
     public function isCaptain(): bool

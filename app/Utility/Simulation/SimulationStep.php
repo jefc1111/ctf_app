@@ -2,12 +2,15 @@
 
 namespace App\Utility\Simulation;
 
+use App\Models\Submission;
 use Illuminate\Console\Command;
 use App\Jobs\Simulator\SimulateSubmission;
+use App\Jobs\Simulator\SimulateCoachDecision;
 use App\Models\Event;
 use App\Models\team;
 use App\Models\CaseModel;
 use App\Models\SubmissionCategory;
+use App\Enums\SubmissionDecisionStatus;
 
 class SimulationStep
 {
@@ -26,7 +29,9 @@ class SimulationStep
 
     public function run(): void
     {
-        $this->distributeSubmissions($this->qtySubmissionsThisStep());
+        $this->simulateCoachDecisions();
+
+        $this->createSimulatedSubmissions($this->qtySubmissionsThisStep());
     }
 
     private function qtySubmissionsThisStep(): int
@@ -45,7 +50,7 @@ class SimulationStep
         return $result;
     }
 
-    private function distributeSubmissions(int $count): void
+    private function createSimulatedSubmissions(int $count): void
     {
         $teams = $this->event->teams;
 
@@ -110,5 +115,23 @@ class SimulationStep
         }
 
         return $items->last();
+    }
+
+    private function simulateCoachDecisions(): void
+    {
+        // Get all pending submissions for this event
+        $submissions = $this->event->submissions
+            ->where('decision_status', SubmissionDecisionStatus::Pending);
+
+        $this->log("{$submissions->count()} submissions awaiting coach decision.");
+
+        if ($submissions->isEmpty()) {
+            return;
+        }
+        
+        // Take a random selection of them (we'll leave some on the table for later) and submit decision update jobs for them
+        $submissions
+            ->random()
+            ->each(fn(Submission $s) => SimulateCoachDecision::dispatch($s)->delay(rand(0, 59)));        
     }
 }
