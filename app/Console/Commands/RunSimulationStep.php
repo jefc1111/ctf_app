@@ -29,6 +29,7 @@ class RunSimulationStep extends Command
     {
         Event::where('simulate_activity', true)
             ->get()
+            ->filter(fn($e) => $e->isInProgress())
             ->each(fn($e) => (new SimulationStep($e, $this))->run());
     }
 }
