@@ -8,6 +8,7 @@ use App\Models\CaseModel;
 use App\Models\Team;
 use App\Models\SubmissionCategory;
 use App\Models\Submission;
+use App\Enums\SubmissionDecisionStatus;
 
 class SimulateSubmission implements ShouldQueue
 {
@@ -33,7 +34,8 @@ class SimulateSubmission implements ShouldQueue
             'team_id' => $this->team->id,
             'owner_id' => $this->team->members->random()->id,
             'submission_category_id' => $this->submissionCategory->id,
-            'case_id' => $this->case->id
+            'case_id' => $this->case->id,
+            'decision_status' => SubmissionDecisionStatus::Pending
         ]);
     }
 }
