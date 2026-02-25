@@ -5,12 +5,12 @@ namespace App\Models;
 use App\Models\CaseModel;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use OwenIt\Auditing\Contracts\Auditable;
 use OwenIt\Auditing\Auditable as AuditableTrait;
 use Carbon\Carbon;
-use Illuminate\Console\Command;
 
 class Event extends Model implements Auditable
 {
@@ -52,6 +52,11 @@ class Event extends Model implements Auditable
     public function teams(): HasMany
     {
         return $this->hasMany(Team::class);
+    }
+
+    public function submissions(): HasManyThrough
+    {
+        return $this->hasManyThrough(Submission::class, CaseModel::class, 'id', 'case_id');
     }
 
     public function isPending(): bool
