@@ -21,7 +21,8 @@ class Event extends Model implements Auditable
     protected $fillable = [
         'name',
         'start_time',
-        'end_time'
+        'end_time',
+        'simulate_activity'
     ];
 
     /**
