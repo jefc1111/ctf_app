@@ -30,7 +30,7 @@ class SimulateSubmission implements ShouldQueue
      */
     public function handle(): void
     {
-        $owner = $this->team->members->random()->id;
+        $owner = $this->team->members->random();
 
         Submission::factory()->create([
             'team_id' => $this->team->id,

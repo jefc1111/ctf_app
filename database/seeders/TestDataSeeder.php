@@ -166,7 +166,7 @@ class TestDataSeeder extends Seeder
             // and we'll set it up for simulated activity to take place
             $eventParameters = $i === 1 ? [
                 'start_time' => Carbon::now(),
-                'end_time' => Carbon::now()->addHours(4),
+                'end_time' => Carbon::now()->addHours(12),
                 'simulate_activity' => true
             ] : [];
 
