@@ -14,7 +14,7 @@ use App\Enums\SubmissionDecisionStatus;
 
 class SimulationStep
 {
-    private const BASE_RATE_PER_HOUR = 1.8;
+    private const BASE_RATE_PER_HOUR = 0.5;
 
     public function __construct(
         private Event $event,
