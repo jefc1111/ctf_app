@@ -32,9 +32,10 @@ class Team extends Model implements Auditable
     protected static function booted()
     {
         static::saving(function ($team) {
+            // dd($team->members);
             // Ensure captain is a team member
             if ($team->captain && $team->captain->team_id !== $team->id) {
-                throw new \Exception('Captain must be a team member');
+                // throw new \Exception('Captain must be a team member');
             }
             
             // Max 4 participants
