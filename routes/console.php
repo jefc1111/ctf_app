@@ -17,7 +17,7 @@ Schedule::call(function () {
     Artisan::call('up');
 })
     ->name('re-seed')
-    ->twiceDaily(0, 12)
+    ->everyFourHours()
     ->withoutOverlapping();
 
 // Only run simulate if app is NOT in maintenance mode
