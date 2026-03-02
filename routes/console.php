@@ -4,7 +4,11 @@ use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
 use App\Models\Event;
 
-Schedule::call(function () {    
+Schedule::call(function (): void {
+    if (! config('ctf.run_simulation')) {
+        return;
+    }
+    
     $activeEvents = Event::where('simulate_activity', true)
         ->get()
         ->filter(fn($e) => $e->isInProgress());
