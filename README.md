@@ -85,7 +85,7 @@ When enabled, automatically generates realistic activity for in-progress events:
 
     ### Simulation mode (optional)
     ```env
-    SIMULATION_MODE=false
+    CTF_RUN_SIMULATION=false
     ```
 6. Run database migrations and seeders:
     ```bash
@@ -120,7 +120,7 @@ When enabled, automatically generates realistic activity for in-progress events:
 ## Simulation Mode
 To enable automated activity generation:
 
-Set `SIMULATION_MODE=true` in `.env`
+Set `CTF_RUN_SIMULATION=true` in `.env`
 
 For events with `simulate_activity=true`, the system will:
 
