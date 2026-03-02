@@ -8,7 +8,7 @@ Schedule::call(function (): void {
     if (! config('ctf.run_simulation')) {
         return;
     }
-    
+
     $activeEvents = Event::where('simulate_activity', true)
         ->get()
         ->filter(fn($e) => $e->isInProgress());
@@ -16,8 +16,16 @@ Schedule::call(function (): void {
     if ($activeEvents->isEmpty()) {
         \Log::warning('No active events - re-seeding database.');
 
-        Artisan::call('down');
-        Artisan::call('migrate:fresh', ['--seed' => true, '--force' => true]);
+        Artisan::call('down', [
+            '--rediect' => 'login',
+            '--render' => 'errors::503-re-seed'
+        ]);
+        
+        Artisan::call('migrate:fresh', [
+            '--seed' => true, 
+            '--force' => true
+        ]);
+
         Artisan::call('up');    
     } else {
         \Log::info('An event is in progress - running a simulation step.');
