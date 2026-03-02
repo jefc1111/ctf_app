@@ -1,26 +1,27 @@
 <?php
 
-use Illuminate\Foundation\Inspiring;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Schedule;
+use App\Models\Event;
 
-Artisan::command('inspire', function () {
-    $this->comment(Inspiring::quote());
-})->purpose('Display an inspiring quote');
+Schedule::call(function () {    
+    $activeEvents = Event::where('simulate_activity', true)
+        ->get()
+        ->filter(fn($e) => $e->isInProgress());
+    
+    if ($activeEvents->isEmpty()) {
+        \Log::warning('No active events - re-seeding database.');
 
-//Schedule::command('ctf:simulate')->everyMinute();
+        Artisan::call('down');
+        Artisan::call('migrate:fresh', ['--seed' => true, '--force' => true]);
+        Artisan::call('up');    
+    } else {
+        \Log::info('An event is in progress - running a simulation step.');
 
-// Re-seed every 12 hours
-Schedule::call(function () {
-    Artisan::call('down');
-    Artisan::call('migrate:fresh', ['--seed' => true, '--force' => true]);
-    Artisan::call('up');
-})
-    ->name('re-seed')
-    ->everyFourHours()
+        Artisan::call('ctf:simulate');
+    }
+})->name('update-simulation')
+    ->everyMinute()
     ->withoutOverlapping();
 
-// Only run simulate if app is NOT in maintenance mode
-Schedule::command('ctf:simulate')
-    ->everyMinute()
-    ->skip(fn () => app()->isDownForMaintenance());
+    

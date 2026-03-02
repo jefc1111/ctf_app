@@ -25,6 +25,8 @@ class SimulationStep
     private function log(string $message): void
     {
         $this->command?->info($message);
+
+        \Log::info($message);
     }
 
     public function run(): void
@@ -56,8 +58,17 @@ class SimulationStep
 
         $cases = $this->event->cases;
 
-        if ($teams->isEmpty() || $cases->isEmpty())
+        if ($teams->isEmpty()) {
+            $this->log("No teams available.");
+
             return;
+        }
+
+        if ($teams->isEmpty()) {
+            $this->log("No cases available.");
+
+            return;
+        }
 
         for ($i = 0; $i < $count; $i++) {
             $team = $this->pickWeighted($teams, fn($t) => $this->teamWeight($t));
