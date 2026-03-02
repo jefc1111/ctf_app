@@ -17,7 +17,7 @@ Schedule::call(function (): void {
         \Log::warning('No active events - re-seeding database.');
 
         Artisan::call('down', [
-            '--rediect' => 'login',
+            '--redirect' => 'login',
             '--render' => 'errors::503-re-seed'
         ]);
         
