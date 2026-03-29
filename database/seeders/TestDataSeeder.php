@@ -106,6 +106,13 @@ class TestDataSeeder extends Seeder
 
                 $bar->advance();
             }
+
+            // $users = User::factory()->count($qtyToCreateForRole)->make([
+            //     'name'     => fake()->name()." ($roleCode)",
+            //     'password' => bcrypt($password),
+            // ])->toArray();
+            
+            // User::insert($users);
         }
 
         $bar->finish();

@@ -73,7 +73,7 @@ class CreateSubmissionAction extends Action
                     'content' => $data['content'],
                     'explanation' => $data['explanation'],
                     'draft' => $data['draft'],
-                    'decision_status' => 'PENDING',
+                    'decision_status' => 'Pending',
                 ]);
 
                 // Optionally show a success notification

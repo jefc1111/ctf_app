@@ -38,9 +38,9 @@ class SubmissionsTable
                 TextColumn::make('decision_status')
                     ->badge()
                     ->color(fn (string $state): string => match ($state) {
-                        'PENDING', 'UNDER_REVIEW', 'AWAITING_PEER_REVIEW',  => 'warning',
-                        'APPROVED' => 'success',
-                        'DECLINED' => 'danger',
+                        'Pending', 'UnderReview', 'AwaitingPeerReview',  => 'warning',
+                        'Approved' => 'success',
+                        'Declined' => 'danger',
                         default => 'gray'
                     }),
                 TextColumn::make('team.event.name')

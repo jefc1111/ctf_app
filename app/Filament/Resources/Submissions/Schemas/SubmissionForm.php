@@ -53,7 +53,7 @@ class SubmissionForm
                     ->schema([
                         Select::make('decision_status')
                             ->required()
-                            ->default('PENDING')
+                            ->default('Pending')
                             ->options(SubmissionDecisionStatus::toArray()),
                         Textarea::make('decision_supporting_evidence')
                             ->rows(3),
